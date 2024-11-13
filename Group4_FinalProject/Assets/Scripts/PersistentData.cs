@@ -12,7 +12,7 @@ public class PersistentData : MonoBehaviour
     public static PersistentData instance { get; private set; }
 
     // Vars to store between scenes
-    public int day;
+    public int day = 1;
 
     // Vars we will probably need to store:
     // - Number of crops planted and what they are.
@@ -35,16 +35,28 @@ public class PersistentData : MonoBehaviour
     }
 
     // Methods to set and get data.
-    public void SetDay(int day)
+
+    // Day Get/Set
+    public int getDay()
+    {
+        return day;
+    }
+
+    public void setDay(int day)
     {
         this.day = day;
+    }
+
+    public void incrementDay()
+    {
+        day++;
     }
 
 
     // Data to reset when the game is restarted/game over
     public void ResetData()
     {
-        day = 0;
+        day = 1;
 
         // Add more here when needed
     }

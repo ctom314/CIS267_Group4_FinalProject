@@ -5,10 +5,11 @@ using UnityEngine;
 public class Placement : MonoBehaviour
 {
     public GameObject PlacementPrefab;
+    public LayerMask baseLayer;
+
     private GameObject tempPrefab;
     private bool moving = false;
     private Collider2D prefabCollider;
-    public LayerMask baseLayer;
     private Color baseColor;
 
     void Update() 
