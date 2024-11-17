@@ -20,6 +20,9 @@ public class PersistentData : MonoBehaviour
     // - Days
     // If you can think of anything else, add it here.
 
+    // Store crop info
+    private Dictionary<string, Crop> cropData = new Dictionary<string, Crop>();
+
     private void Awake()
     {
         // Ensure only one instance of this class exists
@@ -52,11 +55,33 @@ public class PersistentData : MonoBehaviour
         day++;
     }
 
+    // Manage Crop Data
+    // Add
+    public void addCropData(string cropName, Crop crop)
+    {
+        cropData.Add(cropName, crop);
+    }
+
+    // Get
+    public Crop getCropData(string cropName)
+    {
+        // Get crop data if it exists, else null
+        Crop crop = cropData.ContainsKey(cropName) ? cropData[cropName] : null;
+        return crop;
+    }
+
+    // Remove
+    public void removeCropData(string cropName)
+    {
+        cropData.Remove(cropName);
+    }
+
 
     // Data to reset when the game is restarted/game over
     public void ResetData()
     {
         day = 1;
+        cropData.Clear();
 
         // Add more here when needed
     }
