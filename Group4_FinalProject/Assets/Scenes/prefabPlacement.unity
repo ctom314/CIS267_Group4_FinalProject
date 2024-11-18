@@ -660,6 +660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1606587536}
   - component: {fileID: 1606587535}
+  - component: {fileID: 1606587537}
   m_Layer: 0
   m_Name: ScriptTester
   m_TagString: Untagged
@@ -680,9 +681,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlacementPrefab: {fileID: 854577311518287393, guid: 1acbcc6e95f0dc446af746187bd83c3d, type: 3}
+  moving: 0
   baseLayer:
     serializedVersion: 2
     m_Bits: 8
+  startPlacement: 0
 --- !u!4 &1606587536
 Transform:
   m_ObjectHideFlags: 0
@@ -698,6 +701,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1606587537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606587534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6654e655e5503488e8b0a53523e5d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placer: {fileID: 1606587535}
+  barn: {fileID: 7862322510736386345, guid: 231bf5f8a601e1d40a99665a38394e28, type: 3}
 --- !u!1 &1796092334
 GameObject:
   m_ObjectHideFlags: 0

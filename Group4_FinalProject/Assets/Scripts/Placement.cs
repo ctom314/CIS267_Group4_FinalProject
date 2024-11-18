@@ -1,21 +1,38 @@
+//===============================================================================
+// Author: Isaac Shields
+//
+// Desc. This script handles placing objects
+//
+// How to use: To call from a separate script, set "placementPrefab" to
+//             whatever object you want to place. After that set the bool
+//             "startPlacement" to true.
+//===============================================================================
+
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Placement : MonoBehaviour
 {
+
     public GameObject PlacementPrefab;
+    public bool moving = false;
     public LayerMask baseLayer;
-
     private GameObject tempPrefab;
-    private bool moving = false;
-    private Collider2D prefabCollider;
     private Color baseColor;
+    private Collider2D prefabCollider;
+    public bool startPlacement;
+    private void Start() 
+    {
 
-    void Update() 
+    }
+
+    private void Update()
     {
         //spawn in the prefab, save the base color, set the color to a transparent green
-        if(Input.GetKeyDown(KeyCode.Q) && !moving)
+        if(startPlacement && !moving)
         {
             Vector3 trueMousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
             tempPrefab = Instantiate(PlacementPrefab, trueMousePos, Quaternion.identity);
@@ -37,6 +54,7 @@ public class Placement : MonoBehaviour
             moving = false;
             tempPrefab.GetComponent<SpriteRenderer>().color = baseColor;
             tempPrefab.layer = 3;
+            startPlacement = false;
         }
 
         //cancel the placement
@@ -44,6 +62,7 @@ public class Placement : MonoBehaviour
         {
             moving = false;
             Destroy(tempPrefab);
+            startPlacement = false;
         }
 
         //change color from green to red if it's in an invalid position
@@ -83,5 +102,4 @@ public class Placement : MonoBehaviour
 
         return vp;
     }
-
 }
