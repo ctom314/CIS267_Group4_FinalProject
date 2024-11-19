@@ -1,3 +1,4 @@
+using Cinemachine.PostFX;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,8 +7,9 @@ using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
-    public int dayLengthMinutes = 7;
-    public int nightLengthMinutes = 7;
+    public float dayLengthMinutes = 7;
+    public float nightLengthMinutes = 7;
+    public bool isDay = true;
 
     // Time UI
     public Slider timeSlider;
@@ -23,13 +25,15 @@ public class TimeManager : MonoBehaviour
     public Sprite sun;
     public Sprite moon;
 
+    // Post Processing
+    public CinemachinePostProcessing postProcessing;
+
     // Time lengths in seconds
-    private int dayLength;
-    private int nightLength;
+    private float dayLength;
+    private float nightLength;
 
     // Time vals
     private int curTime = 0;
-    private bool isDay = true;
 
     private PauseManager pm;
 
@@ -56,21 +60,29 @@ public class TimeManager : MonoBehaviour
         // Check if day/night has ended
         if (isDay && dayEnded())
         {
+            // Switch to night
             isDay = false;
             curTime = 0;
             timeSlider.maxValue = nightLength;
             updateSlider();
             swapTimeSprites();
             swapSliderColors();
+
+            // Enable PP
+            postProcessing.enabled = true;
         }
         else if (!isDay && nightEnded())
         {
+            // Switch to day
             isDay = true;
             curTime = 0;
             timeSlider.maxValue = dayLength;
             updateSlider();
             swapTimeSprites();
             swapSliderColors();
+
+            // Disable PP
+            postProcessing.enabled = false;
 
             // Increment to next day
             incrementDay();

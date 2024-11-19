@@ -32,7 +32,7 @@ public class Crop
         return name;
     }
 
-    public string GetType()
+    public string GetCropType()
     {
         return type;
     }
@@ -58,7 +58,7 @@ public class Crop
         name = n;
     }
 
-    public void SetType(string t)
+    public void SetCropType(string t)
     {
         type = t;
     }
