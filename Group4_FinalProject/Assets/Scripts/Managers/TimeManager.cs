@@ -16,6 +16,7 @@ public class TimeManager : MonoBehaviour
     public Image timeStart;
     public Image timeEnd;
     public TextMeshProUGUI dayCount;
+    public GameObject sliderObj;
 
     // Slider Colors
     public Color dayColor;
@@ -51,6 +52,7 @@ public class TimeManager : MonoBehaviour
         // Setup slider
         timeSlider.maxValue = dayLength;
         timeSlider.fillRect.GetComponent<Image>().color = dayColor;
+        timeSlider.interactable = false;
 
         StartCoroutine(incrementTime());
     }
