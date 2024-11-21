@@ -8,6 +8,7 @@ public class GameButtonHandler : MonoBehaviour
     public GameObject cursorObj;
     public LayerMask interactiveLayer;
     public PersistentData pd;
+    private PlayerControls controls;
 
     // Start is called before the first frame update
     void Start()
@@ -15,9 +16,25 @@ public class GameButtonHandler : MonoBehaviour
         pm = GetComponent<PauseManager>();
     }
 
+    private void Awake()
+    {
+        controls = new PlayerControls();
+    }
+
+    private void OnEnable()
+    {
+        controls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Disable();
+    }
+
+
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) || controls.Player.rightTrigger.triggered)
         {
             clickAction();
         }
@@ -39,7 +56,7 @@ public class GameButtonHandler : MonoBehaviour
     {
         Vector3 cursorPos = cursorObj.transform.position;
         CircleCollider2D cursorCollider = cursorObj.GetComponent<CircleCollider2D>();
-        Collider2D tester = Physics2D.OverlapCircle(cursorPos, 4, interactiveLayer);
+        Collider2D tester = Physics2D.OverlapCircle(cursorPos, cursorCollider.radius*2, interactiveLayer);
 
         if(tester != null)
         {

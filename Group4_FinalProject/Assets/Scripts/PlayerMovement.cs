@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,15 +18,22 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Vector2 movement;
+    public Vector3 curPos;
 
     // Controller movement
     private PlayerControls controls;
+    public GameObject cursor;
+    public Sprite cursorSpriteClicked;
+    private Sprite baseCursorSprite;
+    public bool controller;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        Cursor.visible = false;
+        baseCursorSprite = cursor.GetComponent<SpriteRenderer>().sprite;
     }
 
     // Update is called once per frame
@@ -35,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
         {
             move();
             updateSprite();
+            cursorHandler();
         }
     }
 
@@ -51,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Reset movement to zero when input is released
         controls.Player.Move.canceled += ctx => movement = Vector2.zero;
+
     }
 
     private void OnEnable()
@@ -99,6 +109,39 @@ public class PlayerMovement : MonoBehaviour
         {
             // Moving left
             sr.sprite = leftSprite;
+        }
+    }
+
+    private void cursorHandler()
+    {
+
+        if(!controller)
+        {
+            curPos = Camera.main.ScreenToWorldPoint(new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10));
+        }
+        else if(controller)
+        {
+            controls.Player.MoveCursor.performed += ctx => curPos = ctx.ReadValue<Vector2>();
+            controls.Player.MoveCursor.canceled += ctx => curPos = Vector3.zero;
+        }
+        
+        if(controller)
+        {
+            Vector3 moveTo = new Vector3(curPos.x, curPos.y, 0) * 5f * Time.deltaTime;
+            cursor.transform.position += moveTo;
+        }
+        else
+        {
+            cursor.transform.position = curPos;
+        }
+
+        if(Input.GetMouseButtonDown(0) || controls.Player.rightTrigger.triggered)
+        {
+            cursor.GetComponent<SpriteRenderer>().sprite = cursorSpriteClicked;
+        }
+        if(Input.GetMouseButtonUp(0) || controls.Player.rightTrigger.WasReleasedThisFrame())
+        {
+            cursor.GetComponent<SpriteRenderer>().sprite = baseCursorSprite;
         }
     }
 }

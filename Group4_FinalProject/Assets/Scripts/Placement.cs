@@ -24,9 +24,12 @@ public class Placement : MonoBehaviour
     private Color baseColor;
     private Collider2D prefabCollider;
     public bool startPlacement;
+    public GameObject cursor;
+    private PlayerControls controls;
     private void Start() 
     {
-
+        controls = new PlayerControls();
+        controls.Enable();
     }
 
     private void Update()
@@ -34,8 +37,7 @@ public class Placement : MonoBehaviour
         //spawn in the prefab, save the base color, set the color to a transparent green
         if(startPlacement && !moving)
         {
-            Vector3 trueMousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
-            tempPrefab = Instantiate(PlacementPrefab, trueMousePos, Quaternion.identity);
+            tempPrefab = Instantiate(PlacementPrefab, cursor.transform.position, Quaternion.identity);
             baseColor = tempPrefab.GetComponent<SpriteRenderer>().color;
             prefabCollider = tempPrefab.GetComponent<Collider2D>();
             moving = true;
@@ -44,12 +46,11 @@ public class Placement : MonoBehaviour
         //follow the mouse
         if(moving)
         {
-            Vector3 trueMousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
-            tempPrefab.transform.position = trueMousePos;
+            tempPrefab.transform.position = cursor.transform.position;
         }
 
         //place the prefab and set the color back to it's normal color
-        if(moving && Input.GetMouseButtonDown(0) && validPlacement())
+        if(moving && Input.GetMouseButtonDown(0) && validPlacement() || controls.Player.rightTrigger.triggered && moving && validPlacement())
         {
             moving = false;
             tempPrefab.GetComponent<SpriteRenderer>().color = baseColor;
@@ -58,7 +59,7 @@ public class Placement : MonoBehaviour
         }
 
         //cancel the placement
-        if(moving && Input.GetKeyDown(KeyCode.Escape))
+        if(moving && Input.GetKeyDown(KeyCode.Escape) || controls.Player.Pause.triggered)
         {
             moving = false;
             Destroy(tempPrefab);
