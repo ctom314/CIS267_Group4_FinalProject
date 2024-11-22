@@ -18,6 +18,9 @@ public class TimeManager : MonoBehaviour
     public TextMeshProUGUI dayCount;
     public GameObject sliderObj;
 
+    // Season UI
+    public TextMeshProUGUI seasonText;
+
     // Slider Colors
     public Color dayColor;
     public Color nightColor;
@@ -53,6 +56,27 @@ public class TimeManager : MonoBehaviour
         timeSlider.maxValue = dayLength;
         timeSlider.fillRect.GetComponent<Image>().color = dayColor;
         timeSlider.interactable = false;
+
+        // Setup time
+        if (isDay)
+        {
+            // Set time to day
+            timeSlider.maxValue = dayLength;
+            swapTimeSprites();
+            swapSliderColors();
+            postProcessing.enabled = false;
+        }
+        else
+        {
+            // Set time to night
+            timeSlider.maxValue = nightLength;
+            swapTimeSprites();
+            swapSliderColors();
+            postProcessing.enabled = true;
+        }
+
+        // Setup season text
+        updateSeasonDisplay();
 
         StartCoroutine(incrementTime());
     }
@@ -142,6 +166,28 @@ public class TimeManager : MonoBehaviour
     {
         PersistentData.instance.incrementDay();
         dayCount.text = "Day " + PersistentData.instance.getDay();
+
+        // If season has ended, increment season
+        if (PersistentData.instance.getSeasonDay() >= PersistentData.instance.getSeasonLength(PersistentData.instance.getSeasonId()))
+        {
+
+            // Increment season
+            PersistentData.instance.incrementSeason();
+
+            // Update season text
+            updateSeasonDisplay();
+        }
+        else
+        {
+            // No season change, increment days this season
+            PersistentData.instance.incrementSeasonDay();
+        }
+    }
+
+    // Update season text
+    private void updateSeasonDisplay()
+    {
+        seasonText.SetText(PersistentData.instance.getSeasonName());
     }
 
     private IEnumerator incrementTime()

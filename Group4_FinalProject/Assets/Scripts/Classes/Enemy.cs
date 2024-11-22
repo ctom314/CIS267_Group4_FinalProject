@@ -17,9 +17,12 @@ public class Enemy : MonoBehaviour
     public Sprite rightSprite;
 
     private PauseManager pm;
+    private HealthManager hm;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
+
+    
 
     // TEMP
     private GameObject player;
@@ -28,6 +31,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         pm = GameObject.Find("GameManager").GetComponent<PauseManager>();
+        hm = pm.GetComponent<HealthManager>();
 
         player = GameObject.FindGameObjectWithTag("Player");
 
@@ -42,7 +46,8 @@ public class Enemy : MonoBehaviour
         {
             // TEMP: Move towards player
             Vector2 playerLoc = player.transform.position;
-            transform.position = Vector2.MoveTowards(transform.position, playerLoc, speed * Time.deltaTime);
+            Vector2 direction = (playerLoc - (Vector2)transform.position).normalized;
+            rb.velocity = direction * speed;
 
             // Get movement
             Vector2 movement = rb.velocity;
@@ -55,7 +60,7 @@ public class Enemy : MonoBehaviour
     // Change sprite based on which direction the enemy is moving
     private void updateSprite(Vector2 movement)
     {
-        float threshold = 0.01f;
+        float threshold = 0.5f;
 
         if (movement.y > threshold)
         {
@@ -78,4 +83,25 @@ public class Enemy : MonoBehaviour
             sr.sprite = leftSprite;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // If enemy collides with player, decrease player HP
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Allow damage when not in immunity frames
+            if (hm.getDealDamage())
+            {
+                PersistentData.instance.decrementPlayerHP();
+
+                // Update health display
+                hm.updateLivesDisplay();
+
+                // Start immunity frames
+                StartCoroutine(hm.immunityFrames());
+            }
+        }
+    }
+
+    
 }

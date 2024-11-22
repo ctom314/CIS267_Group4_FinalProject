@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!pm.isPaused)
+        if (!pm.isPaused && !PersistentData.instance.isPlayerGameOver())
         {
             move();
             updateSprite();
