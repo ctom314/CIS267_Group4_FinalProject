@@ -928,8 +928,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Day 999
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7c96b2fa461ef8e43ba774815936f664, type: 2}
+  m_sharedMaterial: {fileID: 7129581072691233547, guid: 7c96b2fa461ef8e43ba774815936f664, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1507,9 +1507,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1872993483}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -325.00003}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 44.549988}
   m_SizeDelta: {x: 180, y: 90}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &837488479
@@ -3018,8 +3018,8 @@ MonoBehaviour:
   seasonText: {fileID: 8444805}
   dayColor: {r: 1, g: 0.7557344, b: 0.3443396, a: 1}
   nightColor: {r: 0.891988, g: 0.6273585, b: 1, a: 1}
-  sun: {fileID: 21300000, guid: 97866cc01a9ca60478e85d2c8d66f367, type: 3}
-  moon: {fileID: 21300000, guid: 8639aee50cc5328418cc451b1fb4ac9f, type: 3}
+  sun: {fileID: 21300000, guid: e5446cf280c30c64eba0e2f446b3a0e0, type: 3}
+  moon: {fileID: 21300000, guid: 0e39a6b2ee3a5a44b9f24652b9dbd262, type: 3}
   postProcessing: {fileID: 2146263277}
 --- !u!114 &1519473300
 MonoBehaviour:
@@ -3088,8 +3088,8 @@ MonoBehaviour:
   - {fileID: 383764332}
   - {fileID: 1292721070}
   - {fileID: 1837484299}
-  heart_full: {fileID: 21300000, guid: c84930ed49bf0204ea9efb807d03d458, type: 3}
-  heart_empty: {fileID: 21300000, guid: bf0265c5b932998409a536a931b4d768, type: 3}
+  heart_full: {fileID: 21300000, guid: e0c1916b81dcf614fa4a5f04b5633ee5, type: 3}
+  heart_empty: {fileID: 21300000, guid: 5835cb7c2fbf43549bb4e564b37c40fc, type: 3}
   immunityDuration: 1
 --- !u!114 &1519473304
 MonoBehaviour:
@@ -3773,10 +3773,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1872993483}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -529.1, y: -337}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 92.97687, y: 34.502777}
+  m_SizeDelta: {x: 99.9755, y: 94.2084}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1760220388
 GameObject:
@@ -3837,7 +3837,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 50
-  m_Sprite: {fileID: 1739848936, guid: 45db1acf43371774daded78b3842cab9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8e31a4f7fd2b06640a9cebc2f166c798, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4465,9 +4465,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1965386094}
   - component: {fileID: 1965386093}
+  - component: {fileID: 1965386090}
   - component: {fileID: 1965386092}
   - component: {fileID: 1965386091}
-  - component: {fileID: 1965386090}
   m_Layer: 7
   m_Name: temp player
   m_TagString: Player
@@ -4492,6 +4492,7 @@ MonoBehaviour:
   maxStamina: 5
   staminaRecoveryRate: 1
   depletionRecoveryDelay: 2
+  currentStamina: 0
   greenBar: {fileID: 837488477}
   redBar: {fileID: 1018430342}
   pm: {fileID: 1519473297}
@@ -4501,7 +4502,7 @@ MonoBehaviour:
   rightSprite: {fileID: 21300000, guid: 86e053c94d62a92468e0b5c594643ef2, type: 3}
   curPos: {x: 0, y: 0, z: 0}
   cursor: {fileID: 1760220388}
-  cursorSpriteClicked: {fileID: 865627802, guid: 45db1acf43371774daded78b3842cab9, type: 3}
+  cursorSpriteClicked: {fileID: 21300000, guid: 8e31a4f7fd2b06640a9cebc2f166c798, type: 3}
   controller: 0
   depletionColor: {r: 1, g: 0, b: 0, a: 1}
   normalColor: {r: 0.119692326, g: 1, b: 0, a: 1}

@@ -15,8 +15,8 @@ public class PlayerMovement : MonoBehaviour
     public float staminaRecoveryRate = 1.0f;
     public float depletionRecoveryDelay = 2.0f;
 
-    //This will track the palyer's current stamina, if their sprinting, and the delay
-    private float currentStamina;
+    //This will track the player's current stamina, if their sprinting, and the delay
+    public float currentStamina;
     private bool isSprinting = false;
     private bool recoveringFromDepletion = false;
 
