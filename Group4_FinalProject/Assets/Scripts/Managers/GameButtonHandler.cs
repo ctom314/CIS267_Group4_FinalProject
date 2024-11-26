@@ -1,13 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class GameButtonHandler : MonoBehaviour
 {
-    private PauseManager pm;
     public GameObject cursorObj;
     public LayerMask interactiveLayer;
     public PersistentData pd;
+
+    // UI : Controls Page
+    public GameObject controlsMenu;
+    public GameObject controlsFirstButton;
+    public GameObject controlsClosedButton;
+
+    private PauseManager pm;
     private PlayerControls controls;
 
     // Start is called before the first frame update
@@ -48,9 +56,39 @@ public class GameButtonHandler : MonoBehaviour
     public void returnToMainMenu()
     {
         // Load main menu scene
-        // TODO: Make main menu scene
+        SceneManager.LoadScene("MainMenu");
     }
 
+    // Controls Page
+    public void showControlsMenu()
+    {
+        pm.onControlsPage = true;
+
+        // Hide pause menu
+        pm.pauseMenu.SetActive(false);
+
+        // Show controls menu
+        controlsMenu.SetActive(true);
+
+        // Setup controls first button
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(controlsFirstButton);
+    }
+
+    public void hideControlsMenu()
+    {
+        pm.onControlsPage = false;
+
+        // Hide controls menu
+        controlsMenu.SetActive(false);
+
+        // Show pause menu
+        pm.pauseMenu.SetActive(true);
+
+        // Setup controls closed button
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(controlsClosedButton);
+    }
 
     private void clickAction()
     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PauseManager : MonoBehaviour
 {
@@ -8,7 +9,10 @@ public class PauseManager : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject DarkBackground;
 
+    public GameObject pauseSelectedButton;
+
     public bool isPaused;
+    public bool onControlsPage;
 
     // Controls
     private PlayerControls controls;
@@ -17,6 +21,7 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         isPaused = false;
+        onControlsPage = false;
     }
 
     // ================================================================================
@@ -46,7 +51,7 @@ public class PauseManager : MonoBehaviour
 
     public void togglePause()
     {
-        if (isPaused)
+        if (isPaused && !onControlsPage)
         {
             // Unpause the game
             Time.timeScale = 1;
@@ -54,13 +59,17 @@ public class PauseManager : MonoBehaviour
             pauseMenu.SetActive(false);
             DarkBackground.SetActive(false);
         }
-        else
+        else if (!isPaused && !onControlsPage)
         {
             // Pause the game
             Time.timeScale = 0;
             isPaused = true;
             pauseMenu.SetActive(true);
             DarkBackground.SetActive(true);
+
+            // Setup pause first button
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(pauseSelectedButton);
         }
     }
 }

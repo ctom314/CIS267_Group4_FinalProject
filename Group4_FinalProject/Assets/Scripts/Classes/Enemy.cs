@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class Enemy : MonoBehaviour
 {
@@ -8,7 +9,6 @@ public class Enemy : MonoBehaviour
     public int health = 10;
     public int maxHealth = 10;
     public int damage = 1;
-    public int speed = 5;
 
     // Sprites
     public Sprite upSprite;
@@ -19,7 +19,8 @@ public class Enemy : MonoBehaviour
     private PauseManager pm;
     private HealthManager hm;
 
-    private Rigidbody2D rb;
+    private AIPath aIPath;
+    private AIDestinationSetter destSetter;
     private SpriteRenderer sr;
 
     
@@ -35,8 +36,14 @@ public class Enemy : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player");
 
-        rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        aIPath = GetComponent<AIPath>();
+        destSetter = GetComponent<AIDestinationSetter>();
+
+        // Set the enemy to track the player
+        destSetter.target = player.transform;
+
+        // Get child sprite renderer
+        sr = GetComponentInChildren<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -44,13 +51,8 @@ public class Enemy : MonoBehaviour
     {
         if (!pm.isPaused)
         {
-            // TEMP: Move towards player
-            Vector2 playerLoc = player.transform.position;
-            Vector2 direction = (playerLoc - (Vector2)transform.position).normalized;
-            rb.velocity = direction * speed;
-
             // Get movement
-            Vector2 movement = rb.velocity;
+            Vector2 movement = aIPath.desiredVelocity;
 
             // Update sprite
             updateSprite(movement);

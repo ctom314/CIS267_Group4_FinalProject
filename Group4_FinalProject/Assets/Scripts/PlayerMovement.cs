@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        Cursor.visible = false;
+        //Cursor.visible = false;
         baseCursorSprite = cursor.GetComponent<SpriteRenderer>().sprite;
 
         //Initialize the stamina
