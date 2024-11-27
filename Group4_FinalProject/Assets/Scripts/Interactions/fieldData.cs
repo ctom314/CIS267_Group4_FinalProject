@@ -7,5 +7,4 @@ public class fieldData : MonoBehaviour
     public CropObject cropInfo;
     public int dayPlanted;
     public bool isPlanted;
-
 }

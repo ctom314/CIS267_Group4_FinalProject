@@ -42,7 +42,7 @@ public class GameButtonHandler : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) || controls.Player.rightTrigger.triggered)
+        if(Input.GetMouseButtonDown(0) || controls.Player.rightTrigger.triggered && !pm.isPaused)
         {
             clickAction();
         }
@@ -98,16 +98,9 @@ public class GameButtonHandler : MonoBehaviour
 
         if(tester != null)
         {
-            if(tester.GetComponent<fieldData>() != null)
+            if(tester.gameObject.GetComponent<ObjectData>() != null)
             {
-                fieldData fd = tester.GetComponent<fieldData>();
-
-                //if crops are ready to harvest, harvest them
-                if(fd.isPlanted && pd.getDay() >= fd.dayPlanted + fd.cropInfo.growTime)
-                {
-                    tester.GetComponent<SpriteRenderer>().color = Color.yellow;
-                    Debug.Log("You got " + fd.cropInfo.harvestAmount + " " +fd.cropInfo.cropName);
-                }
+                tester.gameObject.GetComponent<ObjectData>().runLogic();
             }
         }
     }
