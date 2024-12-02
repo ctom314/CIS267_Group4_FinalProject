@@ -51,6 +51,12 @@ public class PlayerMovement : MonoBehaviour
     public GameObject staminaFlashOverlay;
     public float flashDuration = 0.2f;
 
+    // Default to Level 1
+    public int currentStaminaLevel = 1;
+    // List of stamina bar sprites for each level
+    public List<GameObject> greenBarSprites;
+
+
     // Start is called before the first frame update
     void Start()
     {

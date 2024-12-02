@@ -103,5 +103,15 @@ public class GameButtonHandler : MonoBehaviour
                 tester.gameObject.GetComponent<ObjectData>().runLogic();
             }
         }
+
+        if (tester != null)
+        {
+            Debug.Log("Object detected: " + tester.gameObject.name);
+            if (tester.gameObject.GetComponent<ObjectData>() != null)
+            {
+                tester.gameObject.GetComponent<ObjectData>().runLogic();
+            }
+        }
+
     }
 }

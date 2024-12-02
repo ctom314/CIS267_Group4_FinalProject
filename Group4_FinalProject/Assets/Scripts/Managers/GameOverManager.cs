@@ -12,12 +12,27 @@ public class GameOverManager : MonoBehaviour
 
     public GameObject gameOverSelectedButton;
 
+    // Reference to MusicManager
+    private MusicManager musicManager;
+
+    private void Start()
+    {
+        // Find the MusicManager in the scene
+        musicManager = FindObjectOfType<MusicManager>();
+    }
+
     // Update is called once per frame
     void Update()
     {
         // Check if player is dead
         if (PersistentData.instance.isPlayerGameOver())
         {
+            // Pause music
+            if (musicManager != null)
+            {
+                musicManager.PauseMusic();
+            }
+
             // Game over
             showGOScreen();
 
@@ -30,7 +45,6 @@ public class GameOverManager : MonoBehaviour
     }
 
     // Game Over Screen
-    // TODO: Fix Not being able to navigate to Main Menu button on Game Over screen.
     private void showGOScreen()
     {
         gameOverScreen.SetActive(true);
@@ -56,5 +70,11 @@ public class GameOverManager : MonoBehaviour
         SceneManager.LoadScene("SpringMap");
 
         Time.timeScale = 1;
+
+        // Resume music after restarting
+        if (musicManager != null)
+        {
+            musicManager.ResumeMusic();
+        }
     }
 }

@@ -17,11 +17,17 @@ public class PauseManager : MonoBehaviour
     // Controls
     private PlayerControls controls;
 
+    // Reference to Music Manager
+    private MusicManager musicManager;
+
     // Start is called before the first frame update
     void Start()
     {
         isPaused = false;
         onControlsPage = false;
+
+        // Get reference to the MusicManager
+        musicManager = FindObjectOfType<MusicManager>();
     }
 
     // ================================================================================
@@ -58,6 +64,12 @@ public class PauseManager : MonoBehaviour
             isPaused = false;
             pauseMenu.SetActive(false);
             DarkBackground.SetActive(false);
+
+            // Resume the music
+            if (musicManager != null)
+            {
+                musicManager.ResumeMusic();
+            }
         }
         else if (!isPaused && !onControlsPage)
         {
@@ -66,6 +78,12 @@ public class PauseManager : MonoBehaviour
             isPaused = true;
             pauseMenu.SetActive(true);
             DarkBackground.SetActive(true);
+
+            // Pause the music
+            if (musicManager != null)
+            {
+                musicManager.PauseMusic();
+            }
 
             // Setup pause first button
             EventSystem.current.SetSelectedGameObject(null);

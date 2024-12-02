@@ -219,4 +219,32 @@ public class PersistentData : MonoBehaviour
     }
 
     // ====================================================================================
+    //                                      MONEY DATA
+    // ====================================================================================
+
+    private int playerMoney = 1000; // Starting money amount (set default as needed)
+
+    // Get the player's current money
+    public int GetMoney()
+    {
+        return playerMoney;
+    }
+
+    // Set the player's money
+    public void SetMoney(int amount)
+    {
+        playerMoney = Mathf.Max(0, amount); // Ensure money does not go below 0
+    }
+
+    // Add money to the player's total
+    public void AddMoney(int amount)
+    {
+        playerMoney += amount;
+    }
+
+    // Subtract money from the player's total
+    public void SubtractMoney(int amount)
+    {
+        playerMoney = Mathf.Max(0, playerMoney - amount); // Ensure money does not go below 0
+    }
 }

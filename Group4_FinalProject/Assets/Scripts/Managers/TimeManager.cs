@@ -32,6 +32,9 @@ public class TimeManager : MonoBehaviour
     // Post Processing
     public CinemachinePostProcessing postProcessing;
 
+    // Music Manager
+    public MusicManager musicManager;
+
     // Time lengths in seconds
     private float dayLength;
     private float nightLength;
@@ -65,6 +68,9 @@ public class TimeManager : MonoBehaviour
             swapTimeSprites();
             swapSliderColors();
             postProcessing.enabled = false;
+
+            //Start day music
+            musicManager.PlayDayTrack();
         }
         else
         {
@@ -73,6 +79,9 @@ public class TimeManager : MonoBehaviour
             swapTimeSprites();
             swapSliderColors();
             postProcessing.enabled = true;
+
+            //Start night music
+            musicManager.PlayNightTrack();
         }
 
         // Setup season text
@@ -94,6 +103,9 @@ public class TimeManager : MonoBehaviour
             swapTimeSprites();
             swapSliderColors();
 
+            //Switch to night music
+            musicManager.PlayNightTrack();
+
             // Enable PP
             postProcessing.enabled = true;
         }
@@ -106,6 +118,9 @@ public class TimeManager : MonoBehaviour
             updateSlider();
             swapTimeSprites();
             swapSliderColors();
+
+            //Switch to day music
+            musicManager.PlayDayTrack();
 
             // Disable PP
             postProcessing.enabled = false;
@@ -202,5 +217,22 @@ public class TimeManager : MonoBehaviour
 
             updateTime();
         }
+    }
+
+    public void SkipToNight()
+    {
+        // Switch to night
+        isDay = false;
+        curTime = 0;
+        timeSlider.maxValue = nightLength;
+        updateSlider();
+        swapTimeSprites();
+        swapSliderColors();
+
+        // Switch music to night track
+        musicManager.PlayNightTrack();
+
+        // Enable post-processing (if applicable)
+        postProcessing.enabled = true;
     }
 }
