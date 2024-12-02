@@ -33,10 +33,10 @@ public class GameOverManager : MonoBehaviour
                 musicManager.PauseMusic();
             }
 
+            Time.timeScale = 0;
+
             // Game over
             showGOScreen();
-
-            Time.timeScale = 0;
 
             // Setup game over first button
             EventSystem.current.SetSelectedGameObject(null);

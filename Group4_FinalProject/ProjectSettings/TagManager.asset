@@ -15,8 +15,8 @@ TagManager:
   - Water
   - UI
   - Base
-  - Player
   - Enemy
+  - Player
   - 
   - PostProcessing
   - Interactive

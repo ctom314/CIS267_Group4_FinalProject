@@ -3327,7 +3327,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &596328885
 RectTransform:
@@ -5257,7 +5257,7 @@ GameObject:
   - component: {fileID: 1006330557}
   - component: {fileID: 1006330558}
   - component: {fileID: 1006330559}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: tempCrops
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5360,7 +5360,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -6923,7 +6923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopMenu: {fileID: 596328881}
-  darkBackground: {fileID: 0}
+  darkBackground: {fileID: 14137706}
 --- !u!61 &1410931760
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9675,7 +9675,7 @@ GameObject:
   - component: {fileID: 1965386090}
   - component: {fileID: 1965386092}
   - component: {fileID: 1965386091}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: temp player
   m_TagString: Player
   m_Icon: {fileID: 0}

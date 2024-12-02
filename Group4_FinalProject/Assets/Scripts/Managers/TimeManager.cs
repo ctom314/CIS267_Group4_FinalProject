@@ -69,8 +69,10 @@ public class TimeManager : MonoBehaviour
             swapSliderColors();
             postProcessing.enabled = false;
 
+            // TODO: Fix Day music
             //Start day music
-            musicManager.PlayDayTrack();
+            // Disabled for now. Needs to be fixed.
+            //musicManager.PlayDayTrack();
         }
         else
         {
@@ -81,7 +83,8 @@ public class TimeManager : MonoBehaviour
             postProcessing.enabled = true;
 
             //Start night music
-            musicManager.PlayNightTrack();
+            // Disabled for now. Needs to be fixed.
+            //musicManager.PlayNightTrack();
         }
 
         // Setup season text
@@ -104,7 +107,7 @@ public class TimeManager : MonoBehaviour
             swapSliderColors();
 
             //Switch to night music
-            musicManager.PlayNightTrack();
+            //musicManager.PlayNightTrack();
 
             // Enable PP
             postProcessing.enabled = true;
@@ -120,7 +123,8 @@ public class TimeManager : MonoBehaviour
             swapSliderColors();
 
             //Switch to day music
-            musicManager.PlayDayTrack();
+            // Disabled for now. Needs to be fixed.
+            //musicManager.PlayDayTrack();
 
             // Disable PP
             postProcessing.enabled = false;
@@ -230,7 +234,7 @@ public class TimeManager : MonoBehaviour
         swapSliderColors();
 
         // Switch music to night track
-        musicManager.PlayNightTrack();
+        //musicManager.PlayNightTrack();
 
         // Enable post-processing (if applicable)
         postProcessing.enabled = true;
