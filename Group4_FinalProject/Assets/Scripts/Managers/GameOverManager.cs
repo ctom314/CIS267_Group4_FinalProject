@@ -25,7 +25,7 @@ public class GameOverManager : MonoBehaviour
     void Update()
     {
         // Check if player is dead
-        if (PersistentData.instance.isPlayerGameOver())
+        if (PersistentData.instance.isPlayerGameOver() && !gameOverScreen.activeSelf)
         {
             // Pause music
             if (musicManager != null)

@@ -43,12 +43,6 @@ public class PersistentData : MonoBehaviour
         // Add more here when needed
     }
 
-    // Vars we will probably need to store:
-    // - Number of crops planted and what they are.
-    // - Season
-    // - Days
-    // If you can think of anything else, add it here.
-
     // ====================================================================================
     //                                      PLAYER DATA
     // ====================================================================================

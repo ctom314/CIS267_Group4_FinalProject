@@ -56,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
     // List of stamina bar sprites for each level
     public List<GameObject> greenBarSprites;
 
+    // Allow player to move
+    public static bool canMove = true;
 
     // Start is called before the first frame update
     void Start()
@@ -77,8 +79,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!pm.isPaused && !PersistentData.instance.isPlayerGameOver())
         {
-            move();
-            updateSprite();
+            if (canMove)
+            {
+                move();
+                updateSprite();
+            }
+
             cursorHandler();
             UpdateStaminaBars();
         }

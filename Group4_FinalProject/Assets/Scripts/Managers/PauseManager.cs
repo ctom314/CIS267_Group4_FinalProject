@@ -57,37 +57,40 @@ public class PauseManager : MonoBehaviour
 
     public void togglePause()
     {
-        if (isPaused && !onControlsPage)
+        if (!PersistentData.instance.isPlayerGameOver() && !ShopInteract.isShopOpen)
         {
-            // Unpause the game
-            Time.timeScale = 1;
-            isPaused = false;
-            pauseMenu.SetActive(false);
-            DarkBackground.SetActive(false);
-
-            // Resume the music
-            if (musicManager != null)
+            if (isPaused && !onControlsPage)
             {
-                musicManager.ResumeMusic();
-            }
-        }
-        else if (!isPaused && !onControlsPage)
-        {
-            // Pause the game
-            Time.timeScale = 0;
-            isPaused = true;
-            pauseMenu.SetActive(true);
-            DarkBackground.SetActive(true);
+                // Unpause the game
+                Time.timeScale = 1;
+                isPaused = false;
+                pauseMenu.SetActive(false);
+                DarkBackground.SetActive(false);
 
-            // Pause the music
-            if (musicManager != null)
+                // Resume the music
+                if (musicManager != null)
+                {
+                    musicManager.ResumeMusic();
+                }
+            }
+            else if (!isPaused && !onControlsPage)
             {
-                musicManager.PauseMusic();
-            }
+                // Pause the game
+                Time.timeScale = 0;
+                isPaused = true;
+                pauseMenu.SetActive(true);
+                DarkBackground.SetActive(true);
 
-            // Setup pause first button
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(pauseSelectedButton);
+                // Pause the music
+                if (musicManager != null)
+                {
+                    musicManager.PauseMusic();
+                }
+
+                // Setup pause first button
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(pauseSelectedButton);
+            }
         }
     }
 }

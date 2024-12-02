@@ -1,9 +1,15 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ShopInteract : MonoBehaviour
 {
     public GameObject shopMenu; // Assign the Shop UI menu here
     public GameObject darkBackground; // Optional: Background overlay for focus
+
+    // Shop buttons
+    public GameObject shopFirstButton;
+
+    public static bool isShopOpen = false;
 
     private bool isPlayerNearby = false;
 
@@ -39,6 +45,14 @@ public class ShopInteract : MonoBehaviour
         // Activate the shop UI and optional dark background
         shopMenu.SetActive(true);
         darkBackground?.SetActive(true);
+        isShopOpen = true;
+
+        // Setup first button
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(shopFirstButton);
+
+        // Disable player movement
+        PlayerMovement.canMove = false;
     }
 
     public void CloseShopMenu()
@@ -46,5 +60,9 @@ public class ShopInteract : MonoBehaviour
         // Deactivate the shop UI and optional dark background
         shopMenu.SetActive(false);
         darkBackground?.SetActive(false);
+        isShopOpen = false;
+
+        // Enable player movement
+        PlayerMovement.canMove = true;
     }
 }
