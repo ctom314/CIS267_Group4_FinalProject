@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MusicManager : MonoBehaviour
 {
@@ -22,24 +23,25 @@ public class MusicManager : MonoBehaviour
     {
         if (FindObjectsOfType<MusicManager>().Length > 1)
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // Destroy duplicate MusicManager instances
             return;
         }
 
         DontDestroyOnLoad(gameObject);
-
-        audioSource1 = gameObject.AddComponent<AudioSource>();
-        audioSource2 = gameObject.AddComponent<AudioSource>();
-
-        audioSource1.loop = true;
-        audioSource2.loop = true;
-        audioSource1.playOnAwake = false;
-        audioSource2.playOnAwake = false;
+        InitializeAudioSources();
     }
 
     public void PlayDayTrack()
     {
-        if (!isFading && audioSource1.clip != dayMusic && audioSource2.clip != dayMusic)
+        InitializeAudioSources(); // Ensure audio sources are initialized
+
+        if (dayMusic == null)
+        {
+            Debug.LogError("Day music is not assigned!");
+            return;
+        }
+
+        if (!isFading && (audioSource1.clip != dayMusic && audioSource2.clip != dayMusic))
         {
             StartCoroutine(CrossfadeTracks(dayMusic, dayMusicVolume));
         }
@@ -47,7 +49,15 @@ public class MusicManager : MonoBehaviour
 
     public void PlayNightTrack()
     {
-        if (!isFading && audioSource1.clip != nightMusic && audioSource2.clip != nightMusic)
+        InitializeAudioSources(); // Ensure audio sources are initialized
+
+        if (nightMusic == null)
+        {
+            Debug.LogError("Night music is not assigned!");
+            return;
+        }
+
+        if (!isFading && (audioSource1.clip != nightMusic && audioSource2.clip != nightMusic))
         {
             StartCoroutine(CrossfadeTracks(nightMusic, nightMusicVolume));
         }
@@ -61,6 +71,12 @@ public class MusicManager : MonoBehaviour
 
     private IEnumerator CrossfadeTracks(AudioClip newTrack, float newVolume)
     {
+        if (audioSource1 == null || audioSource2 == null)
+        {
+            Debug.LogWarning("Audio sources are null. Reinitializing.");
+            InitializeAudioSources();
+        }
+
         isFading = true;
 
         AudioSource activeSource = audioSource1.isPlaying ? audioSource1 : audioSource2;
@@ -159,5 +175,39 @@ public class MusicManager : MonoBehaviour
         }
 
         idleSource.volume = newVolume;
+    }
+
+    public void ResetMusic(string currentScene)
+    {
+        StopMusic(); // Ensure all music stops
+        InitializeAudioSources(); // Reinitialize audio sources
+
+        if (currentScene == "SpringMap")
+        {
+            PlayDayTrack();
+        }
+        else if (currentScene == "NightScene") // Example for another scene
+        {
+            PlayNightTrack();
+        }
+    }
+
+    public void InitializeAudioSources()
+    {
+        if (audioSource1 == null)
+        {
+            audioSource1 = gameObject.AddComponent<AudioSource>();
+            audioSource1.loop = true;
+            audioSource1.playOnAwake = false;
+            Debug.Log("Recreated audioSource1");
+        }
+
+        if (audioSource2 == null)
+        {
+            audioSource2 = gameObject.AddComponent<AudioSource>();
+            audioSource2.loop = true;
+            audioSource2.playOnAwake = false;
+            Debug.Log("Recreated audioSource2");
+        }
     }
 }

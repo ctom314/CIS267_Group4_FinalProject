@@ -1,6 +1,5 @@
 using Cinemachine.PostFX;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,7 +38,7 @@ public class TimeManager : MonoBehaviour
     private float dayLength;
     private float nightLength;
 
-    // Time vals
+    // Time values
     private int curTime = 0;
 
     private PauseManager pm;
@@ -47,54 +46,72 @@ public class TimeManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Ensure the game is unpaused
+        Time.timeScale = 1f;
+
+        // Initialize Pause Manager
         pm = GetComponent<PauseManager>();
 
         // Convert minutes to seconds
         dayLength = dayLengthMinutes * 60;
         nightLength = nightLengthMinutes * 60;
 
+        // Reset Day Counter
         dayCount.text = "Day " + PersistentData.instance.getDay();
 
-        // Setup slider
+        // Reinitialize Time Slider
+        curTime = 0;
+        timeSlider.value = 0;
         timeSlider.maxValue = dayLength;
         timeSlider.fillRect.GetComponent<Image>().color = dayColor;
         timeSlider.interactable = false;
 
-        // Setup time
-        if (isDay)
-        {
-            // Set time to day
-            timeSlider.maxValue = dayLength;
-            swapTimeSprites();
-            swapSliderColors();
-            postProcessing.enabled = false;
-
-            // TODO: Fix Day music
-            //Start day music
-            // Disabled for now. Needs to be fixed.
-            //musicManager.PlayDayTrack();
-        }
-        else
-        {
-            // Set time to night
-            timeSlider.maxValue = nightLength;
-            swapTimeSprites();
-            swapSliderColors();
-            postProcessing.enabled = true;
-
-            //Start night music
-            // Disabled for now. Needs to be fixed.
-            //musicManager.PlayNightTrack();
-        }
+        // Initialize MusicManager and start coroutine
+        StartCoroutine(InitializeMusicManager());
 
         // Setup season text
         updateSeasonDisplay();
 
+        // Start the time increment coroutine
         StartCoroutine(incrementTime());
     }
+
+    private IEnumerator InitializeMusicManager()
+    {
+        // Wait until the MusicManager is found
+        while (musicManager == null)
+        {
+            musicManager = FindObjectOfType<MusicManager>();
+            if (musicManager != null)
+            {
+                musicManager.InitializeAudioSources();
+            }
+            else
+            {
+                // Optional: Instantiate a new MusicManager from prefab if missing
+                GameObject musicManagerPrefab = Resources.Load<GameObject>("MusicManagerPrefab");
+                if (musicManagerPrefab != null)
+                {
+                    Instantiate(musicManagerPrefab);
+                    musicManager = FindObjectOfType<MusicManager>();
+                }
+            }
+            yield return null; // Wait until the next frame
+        }
+
+        // Play the appropriate track based on time of day
+        if (isDay)
+        {
+            musicManager.PlayDayTrack();
+        }
+        else
+        {
+            musicManager.PlayNightTrack();
+        }
+    }
+
     private void updateTime()
     {
-
         // Check if day/night has ended
         if (isDay && dayEnded())
         {
@@ -106,10 +123,10 @@ public class TimeManager : MonoBehaviour
             swapTimeSprites();
             swapSliderColors();
 
-            //Switch to night music
-            //musicManager.PlayNightTrack();
+            // Switch to night music
+            musicManager?.PlayNightTrack();
 
-            // Enable PP
+            // Enable Post Processing
             postProcessing.enabled = true;
         }
         else if (!isDay && nightEnded())
@@ -122,11 +139,10 @@ public class TimeManager : MonoBehaviour
             swapTimeSprites();
             swapSliderColors();
 
-            //Switch to day music
-            // Disabled for now. Needs to be fixed.
-            //musicManager.PlayDayTrack();
+            // Switch to day music
+            musicManager?.PlayDayTrack();
 
-            // Disable PP
+            // Disable Post Processing
             postProcessing.enabled = false;
 
             // Increment to next day
@@ -154,7 +170,6 @@ public class TimeManager : MonoBehaviour
     private void swapSliderColors()
     {
         // Change the color of the slider fill based on time of day
-
         if (isDay)
         {
             timeSlider.fillRect.GetComponent<Image>().color = dayColor;
@@ -189,7 +204,6 @@ public class TimeManager : MonoBehaviour
         // If season has ended, increment season
         if (PersistentData.instance.getSeasonDay() >= PersistentData.instance.getSeasonLength(PersistentData.instance.getSeasonId()))
         {
-
             // Increment season
             PersistentData.instance.incrementSeason();
 
@@ -234,7 +248,7 @@ public class TimeManager : MonoBehaviour
         swapSliderColors();
 
         // Switch music to night track
-        //musicManager.PlayNightTrack();
+        musicManager?.PlayNightTrack();
 
         // Enable post-processing (if applicable)
         postProcessing.enabled = true;

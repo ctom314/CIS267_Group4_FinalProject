@@ -36,6 +36,9 @@ public class MenuButtonHandler : MonoBehaviour
         SceneManager.LoadScene("SpringMap");
 
         Time.timeScale = 1;
+
+        // Reinitialize TimeManager and MusicManager
+        PersistentData.instance.ResetData();
     }
 
     public void viewCredits()
