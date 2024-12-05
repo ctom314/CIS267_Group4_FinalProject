@@ -10,6 +10,7 @@ public class Silo : MonoBehaviour
     {
         public string name;
         public int amount;
+        public Sprite cropImage;
     }
 
     private CropObject[] crops;
@@ -23,6 +24,7 @@ public class Silo : MonoBehaviour
             siloData sd = new siloData();
             sd.amount = 0;
             sd.name = c.name;
+            sd.cropImage = c.cropIcon;
             siloDataList.Add(sd);
         }
     }

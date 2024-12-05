@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SiloCanvas : MonoBehaviour
 {
 
     public GameObject texbox;
     public Transform canvas;
+    public Button exitBtn;
+    public GameObject uiPrefab;
     private void Start() 
     {
-        
+        exitBtn.onClick.AddListener(closeCanvas);
     }
 
 
@@ -23,9 +26,16 @@ public class SiloCanvas : MonoBehaviour
         }
         foreach (Silo.siloData sd in data)
         {
-            GameObject newUiElement = Instantiate(texbox, canvas);
-            texbox.GetComponent<TextMeshProUGUI>().text = sd.name + ": " + sd.amount;
+            GameObject newUiElement = Instantiate(uiPrefab);
+            newUiElement.transform.SetParent(canvas, false);
+            newUiElement.GetComponentInChildren<Image>().sprite = sd.cropImage;
+            newUiElement.GetComponentInChildren<TextMeshProUGUI>().text = sd.amount.ToString();
 
         }
+    }
+
+    private void closeCanvas()
+    {
+        gameObject.SetActive(false);
     }
 }
