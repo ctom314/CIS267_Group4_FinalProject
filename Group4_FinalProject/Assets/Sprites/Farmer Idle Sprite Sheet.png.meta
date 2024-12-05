@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8a4dec99338abb34296cc0cccdad8b23
+guid: 35d24b8fa0d85aa48b9ad76196104bf1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 26
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -134,7 +134,91 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Farmer Idle Sprite Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 519
+        width: 65
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72c59d73e0fc3914986d4ffa2b95b6d1
+      internalID: 535852842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Farmer Idle Sprite Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 359
+        width: 65
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b48b235d994e90408cf08b659b475c4
+      internalID: -251076128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Farmer Idle Sprite Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 199
+        width: 60
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b41f219067505e448cd68a7e112338e
+      internalID: 1201242800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Farmer Idle Sprite Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 39
+        width: 65
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfc51acfcdf8ae14aba4b71fefee2b3f
+      internalID: 98700993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -145,7 +229,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Farmer Idle Sprite Sheet_0: 535852842
+      Farmer Idle Sprite Sheet_1: -251076128
+      Farmer Idle Sprite Sheet_2: 1201242800
+      Farmer Idle Sprite Sheet_3: 98700993
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

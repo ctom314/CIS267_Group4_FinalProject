@@ -58,6 +58,9 @@ public class BarnInteract : MonoBehaviour
         // Activate the sleep menu UI
         sleepMenu.SetActive(true);
         darkBackground.SetActive(true);
+
+        // Disable player movement
+        PlayerMovement.canMove = false;
     }
 
     public void CloseSleepMenu()
@@ -65,6 +68,9 @@ public class BarnInteract : MonoBehaviour
         // Deactivate the sleep menu UI
         sleepMenu.SetActive(false);
         darkBackground.SetActive(false);
+
+        // Enable player movement
+        PlayerMovement.canMove = true;
     }
 
     public void SleepTillNight()

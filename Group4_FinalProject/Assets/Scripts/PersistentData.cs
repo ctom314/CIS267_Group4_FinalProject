@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PersistentData : MonoBehaviour
 {
@@ -201,7 +202,7 @@ public class PersistentData : MonoBehaviour
         // Get name of season using value
         return seasonNames[seasonId];
     }
-    
+
     public int getSeasonDay()
     {
         return daysThisSeason;
@@ -240,5 +241,57 @@ public class PersistentData : MonoBehaviour
     public void SubtractMoney(int amount)
     {
         playerMoney = Mathf.Max(0, playerMoney - amount); // Ensure money does not go below 0
+    }
+
+    // ====================================================================================
+    //                                      SEASON TRANSITION
+    // ====================================================================================
+
+    // Transition to the next season
+    public void TransitionToNextSeason()
+    {
+        // Reset health
+        playerData.SetHealth(playerData.GetMaxHealth());
+
+        // Check if the season has ended
+        if (daysThisSeason >= seasonLengths[seasonId])
+        {
+            // Increment the season
+            incrementSeason();
+        }
+
+        // Fade to black and load the next scene
+        StartCoroutine(LoadNextSeasonScene());
+    }
+
+    private IEnumerator LoadNextSeasonScene()
+    {
+        Debug.Log("Starting fade-out...");
+        yield return StartCoroutine(FadeManager.instance.FadeOut(2f));
+
+        Debug.Log("Loading next scene...");
+        switch (seasonId)
+        {
+            case 1:
+                SceneManager.LoadScene("SpringMap");
+                break;
+            case 2:
+                SceneManager.LoadScene("SummerMap");
+                break;
+            case 3:
+                SceneManager.LoadScene("FallMap");
+                break;
+            case 4:
+                SceneManager.LoadScene("WinterMap");
+                break;
+            default:
+                Debug.LogError("Invalid season ID!");
+                break;
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        Debug.Log("Fading back in...");
+        yield return StartCoroutine(FadeManager.instance.FadeIn(2f));
     }
 }

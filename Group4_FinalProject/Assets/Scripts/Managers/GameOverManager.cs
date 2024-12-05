@@ -76,5 +76,19 @@ public class GameOverManager : MonoBehaviour
         {
             musicManager.ResumeMusic();
         }
+
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            Animator animator = player.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.SetBool("isWalking", false);
+                animator.SetFloat("InputX", 0);
+                animator.SetFloat("InputY", 0);
+                animator.SetFloat("LastInputX", 0);
+                animator.SetFloat("LastInputY", -1); // Default to facing down, for example
+            }
+        }
     }
 }
