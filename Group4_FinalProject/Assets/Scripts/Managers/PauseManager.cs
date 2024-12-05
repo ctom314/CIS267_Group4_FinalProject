@@ -12,7 +12,7 @@ public class PauseManager : MonoBehaviour
     public GameObject pauseSelectedButton;
 
     public bool isPaused;
-    public bool onControlsPage;
+    public static bool canPause;
 
     // Controls
     private PlayerControls controls;
@@ -24,7 +24,7 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         isPaused = false;
-        onControlsPage = false;
+        canPause = true;
 
         // Get reference to the MusicManager
         musicManager = FindObjectOfType<MusicManager>();
@@ -59,7 +59,7 @@ public class PauseManager : MonoBehaviour
     {
         if (!PersistentData.instance.isPlayerGameOver() && !ShopInteract.isShopOpen)
         {
-            if (isPaused && !onControlsPage)
+            if (isPaused && canPause)
             {
                 // Unpause the game
                 Time.timeScale = 1;
@@ -73,7 +73,7 @@ public class PauseManager : MonoBehaviour
                     musicManager.ResumeMusic();
                 }
             }
-            else if (!isPaused && !onControlsPage)
+            else if (!isPaused && canPause)
             {
                 // Pause the game
                 Time.timeScale = 0;

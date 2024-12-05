@@ -4310,6 +4310,7 @@ MonoBehaviour:
   blackOverlay: {fileID: 1374252309}
   fadeDuration: 1
   blackHoldTime: 2
+  barnFirstButton: {fileID: 1533960449}
 --- !u!61 &777426937
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8762,7 +8763,6 @@ MonoBehaviour:
   DarkBackground: {fileID: 14137706}
   pauseSelectedButton: {fileID: 859729324}
   isPaused: 0
-  onControlsPage: 0
 --- !u!114 &1519473298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8994,7 +8994,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 1
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -9755,7 +9755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 1
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}

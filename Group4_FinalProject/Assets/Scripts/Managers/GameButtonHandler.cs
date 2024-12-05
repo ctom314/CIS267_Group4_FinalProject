@@ -62,7 +62,7 @@ public class GameButtonHandler : MonoBehaviour
     // Controls Page
     public void showControlsMenu()
     {
-        pm.onControlsPage = true;
+        PauseManager.canPause = false;
 
         // Hide pause menu
         pm.pauseMenu.SetActive(false);
@@ -77,7 +77,7 @@ public class GameButtonHandler : MonoBehaviour
 
     public void hideControlsMenu()
     {
-        pm.onControlsPage = false;
+        PauseManager.canPause = true;
 
         // Hide controls menu
         controlsMenu.SetActive(false);

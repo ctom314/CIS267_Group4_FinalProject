@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BarnInteract : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class BarnInteract : MonoBehaviour
     public CanvasGroup blackOverlay; // Reference to Black Overlay for fade
     public float fadeDuration = 1.0f; // Duration of the fade
     public float blackHoldTime = 2.0f; // Time the screen stays black
+
+    public GameObject barnFirstButton;
 
     private MusicManager musicManager; // Reference to Music Manager
     private bool isPlayerNearby = false; // Tracks if the player is near the barn
@@ -61,6 +64,13 @@ public class BarnInteract : MonoBehaviour
 
         // Disable player movement
         PlayerMovement.canMove = false;
+
+        // Prevent pausing
+        PauseManager.canPause = false;
+
+        // Setup first button
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(barnFirstButton);
     }
 
     public void CloseSleepMenu()
@@ -71,6 +81,9 @@ public class BarnInteract : MonoBehaviour
 
         // Enable player movement
         PlayerMovement.canMove = true;
+
+        // Allow pausing
+        PauseManager.canPause = true;
     }
 
     public void SleepTillNight()
