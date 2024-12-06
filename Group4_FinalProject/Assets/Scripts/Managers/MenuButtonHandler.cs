@@ -6,15 +6,21 @@ using UnityEngine.EventSystems;
 
 public class MenuButtonHandler : MonoBehaviour
 {
-    // Menu : Buttons
+    // Menu
+    public GameObject mainMenu;
     public GameObject menuFirstButton;
+
+    // Menu : Controls
+    public GameObject controlsMenu;
+    public GameObject controlsFirstButton;
+    public GameObject controlsClosedButton;
+
+    // Menu : Credits
+    public GameObject creditsMenu;
     public GameObject creditsFirstButton;
     public GameObject creditsClosedButton;
 
-    // Menu : Credits
-    public GameObject mainMenu;
-    public GameObject creditsMenu;
-
+    private PlayerControls controls;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +29,30 @@ public class MenuButtonHandler : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(menuFirstButton);
     }
+
+    // ================================================================================
+    //                                  CONTROLLER INPUT
+    // ================================================================================
+    private void Awake()
+    {
+        // Get Player Controls
+        controls = new PlayerControls();
+
+        // Close menus
+        controls.Player.Back.performed += ctx => closeMenus();
+    }
+
+    private void OnEnable()
+    {
+        controls.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Player.Disable();
+    }
+
+    // ================================================================================
 
     // Update is called once per frame
     void Update()
@@ -41,6 +71,9 @@ public class MenuButtonHandler : MonoBehaviour
         PersistentData.instance.ResetData();
     }
 
+    // ================================================================================
+    //                                  CREDITS
+    // ================================================================================
     public void viewCredits()
     {
         // Hide main menu
@@ -67,7 +100,54 @@ public class MenuButtonHandler : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(creditsClosedButton);
     }
 
-    public void exitGame()
+    // ================================================================================
+    //                                  CONTROLS
+    // ================================================================================
+
+    public void viewControls()
+    {
+        // Hide main menu
+        mainMenu.SetActive(false);
+
+        // Show controls menu
+        controlsMenu.SetActive(true);
+
+        // Setup controls first button
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(controlsFirstButton);
+    }
+
+    public void closeControls()
+    {
+        // Hide controls menu
+        controlsMenu.SetActive(false);
+
+        // Show main menu
+        mainMenu.SetActive(true);
+
+        // Setup controls closed button
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(controlsClosedButton);
+    }
+
+    // ================================================================================
+
+    // Used with Back button
+    private void closeMenus()
+    {
+        if (controlsMenu.activeSelf)
+        {
+            // Close controls page
+            closeControls();
+        }
+        else if (creditsMenu.activeSelf)
+        {
+            // Close credits page
+            closeCredits();
+        }
+    }
+
+        public void exitGame()
     {
         Application.Quit();
     }

@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class ShopInteract : MonoBehaviour
 {
     public GameObject shopMenu; // Assign the Shop UI menu here
-    public GameObject darkBackground; // Optional: Background overlay for focus
+    //public GameObject darkBackground;
 
     // Shop buttons
     public GameObject shopFirstButton;
@@ -12,6 +12,32 @@ public class ShopInteract : MonoBehaviour
     public static bool isShopOpen = false;
 
     private bool isPlayerNearby = false;
+
+    private PlayerControls controls;
+
+    // ================================================================================ 
+    //                                CONTROLLER INPUT 
+    // ================================================================================ 
+    private void Awake()
+    {
+        // Setup player controls
+        controls = new PlayerControls();
+
+        // Back button to close in-game menus
+        controls.Player.Back.performed += ctx => CloseShopMenu();
+    }
+
+    private void OnEnable()
+    {
+        controls.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Player.Disable();
+    }
+
+    // ================================================================================
 
     private void Update()
     {
@@ -44,7 +70,7 @@ public class ShopInteract : MonoBehaviour
     {
         // Activate the shop UI and optional dark background
         shopMenu.SetActive(true);
-        darkBackground?.SetActive(true);
+        //darkBackground?.SetActive(true);
         isShopOpen = true;
 
         // Setup first button
@@ -59,7 +85,7 @@ public class ShopInteract : MonoBehaviour
     {
         // Deactivate the shop UI and optional dark background
         shopMenu.SetActive(false);
-        darkBackground?.SetActive(false);
+        //darkBackground?.SetActive(false);
         isShopOpen = false;
 
         // Enable player movement

@@ -34,6 +34,7 @@ public class PersistentData : MonoBehaviour
         cropData.Clear();
         playerData.SetMaxHealth(3);
         playerData.SetHealth(playerData.GetMaxHealth());
+        playerMoney = PLAYER_STARTING_MONEY;
         isGameOver = false;
 
         // Reset Time/Season Stats
@@ -188,6 +189,15 @@ public class PersistentData : MonoBehaviour
         {
             seasonId++;
         }
+
+        loadSeasonMap(seasonId);
+    }
+
+    // Load season map
+    public void loadSeasonMap(int id)
+    {
+        string sceneName = seasonNames[id] + "Map";
+        SceneManager.LoadScene(sceneName);
     }
 
     // Get length of a season
@@ -217,7 +227,10 @@ public class PersistentData : MonoBehaviour
     //                                      MONEY DATA
     // ====================================================================================
 
-    private int playerMoney = 1000; // Starting money amount (set default as needed)
+    // Starting money amount
+    public static readonly int PLAYER_STARTING_MONEY = 1000; // Starting money amount (set default as needed)
+
+    private int playerMoney; 
 
     // Get the player's current money
     public int GetMoney()

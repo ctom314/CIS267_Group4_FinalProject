@@ -116,40 +116,50 @@ public class TimeManager : MonoBehaviour
         if (isDay && dayEnded())
         {
             // Switch to night
-            isDay = false;
-            curTime = 0;
-            timeSlider.maxValue = nightLength;
-            updateSlider();
-            swapTimeSprites();
-            swapSliderColors();
-
-            // Switch to night music
-            musicManager?.PlayNightTrack();
-
-            // Enable Post Processing
-            postProcessing.enabled = true;
+            switchToNight();
         }
         else if (!isDay && nightEnded())
         {
             // Switch to day
-            isDay = true;
-            curTime = 0;
-            timeSlider.maxValue = dayLength;
-            updateSlider();
-            swapTimeSprites();
-            swapSliderColors();
-
-            // Switch to day music
-            musicManager?.PlayDayTrack();
-
-            // Disable Post Processing
-            postProcessing.enabled = false;
+            switchToDay();
 
             // Increment to next day
             incrementDay();
         }
 
         updateSlider();
+    }
+
+    private void switchToNight()
+    {
+        isDay = false;
+        curTime = 0;
+        timeSlider.maxValue = nightLength;
+        updateSlider();
+        swapTimeSprites();
+        swapSliderColors();
+
+        // Switch to night music
+        musicManager?.PlayNightTrack();
+
+        // Enable Post Processing
+        postProcessing.enabled = true;
+    }
+
+    private void switchToDay()
+    {
+        isDay = true;
+        curTime = 0;
+        timeSlider.maxValue = dayLength;
+        updateSlider();
+        swapTimeSprites();
+        swapSliderColors();
+
+        // Switch to day music
+        musicManager?.PlayDayTrack();
+
+        // Disable Post Processing
+        postProcessing.enabled = false;
     }
 
     private void swapTimeSprites()

@@ -16,6 +16,8 @@ public class BarnInteract : MonoBehaviour
     private MusicManager musicManager; // Reference to Music Manager
     private bool isPlayerNearby = false; // Tracks if the player is near the barn
 
+    private PlayerControls controls;
+
     private void Start()
     {
         // Find the MusicManager dynamically if it's not assigned
@@ -28,6 +30,30 @@ public class BarnInteract : MonoBehaviour
             }
         }
     }
+
+    // ================================================================================
+    //                                CONTROLLER INPUT
+    // ================================================================================
+    private void Awake()
+    {
+        // Setup player controls
+        controls = new PlayerControls();
+
+        // Back button to close in-game menus
+        controls.Player.Back.performed += ctx => CloseSleepMenu();
+    }
+
+    private void OnEnable()
+    {
+        controls.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Player.Disable();
+    }
+
+    // ================================================================================
 
     private void Update()
     {
@@ -91,6 +117,9 @@ public class BarnInteract : MonoBehaviour
         // Close the menu and start the fade transition to night
         CloseSleepMenu();
 
+        // Disable ability to pause
+        PauseManager.canPause = false;
+
         // Disable player movement
         PlayerMovement.canMove = false;
 
@@ -126,6 +155,9 @@ public class BarnInteract : MonoBehaviour
 
         // Fade back in from black
         yield return StartCoroutine(Fade(1, 0, fadeDuration));
+
+        // Re-enable pausing
+        PauseManager.canPause = true;
 
         // Re-enable player movement
         PlayerMovement.canMove = true;

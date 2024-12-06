@@ -17,8 +17,9 @@ public class PauseManager : MonoBehaviour
     // Controls
     private PlayerControls controls;
 
-    // Reference to Music Manager
+    // Managers
     private MusicManager musicManager;
+    private GameButtonHandler gbh;
 
     // Start is called before the first frame update
     void Start()
@@ -26,8 +27,9 @@ public class PauseManager : MonoBehaviour
         isPaused = false;
         canPause = true;
 
-        // Get reference to the MusicManager
+        // Get Managers
         musicManager = FindObjectOfType<MusicManager>();
+        gbh = FindObjectOfType<GameButtonHandler>();
     }
 
     // ================================================================================
@@ -41,6 +43,7 @@ public class PauseManager : MonoBehaviour
 
         // Pause the game
         controls.Player.Pause.performed += ctx => togglePause();
+        controls.Player.Back.performed += ctx => closeMenus();
     }
 
     private void OnEnable()
@@ -90,6 +93,33 @@ public class PauseManager : MonoBehaviour
                 // Setup pause first button
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(pauseSelectedButton);
+            }
+        }
+    }
+
+    // Used with Back button
+    public void closeMenus()
+    {
+        if (isPaused && canPause)
+        {
+            if (!gbh.controlsMenu.activeSelf)
+            {
+                // Close Pause Menu and unpause the game
+                Time.timeScale = 1;
+                isPaused = false;
+                pauseMenu.SetActive(false);
+                DarkBackground.SetActive(false);
+
+                // Resume the music
+                if (musicManager != null)
+                {
+                    musicManager.ResumeMusic();
+                }
+            }
+            else
+            {
+                // Close controls page
+                gbh.hideControlsMenu();
             }
         }
     }
