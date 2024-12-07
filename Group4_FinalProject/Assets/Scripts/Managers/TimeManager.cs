@@ -139,11 +139,10 @@ public class TimeManager : MonoBehaviour
         swapTimeSprites();
         swapSliderColors();
 
-        // Switch to night music
         musicManager?.PlayNightTrack();
-
-        // Enable Post Processing
         postProcessing.enabled = true;
+
+        NotifyCrops(false); // Pause crop growth
     }
 
     private void switchToDay()
@@ -155,11 +154,10 @@ public class TimeManager : MonoBehaviour
         swapTimeSprites();
         swapSliderColors();
 
-        // Switch to day music
         musicManager?.PlayDayTrack();
-
-        // Disable Post Processing
         postProcessing.enabled = false;
+
+        NotifyCrops(true); // Resume crop growth
     }
 
     private void swapTimeSprites()
@@ -262,5 +260,21 @@ public class TimeManager : MonoBehaviour
 
         // Enable post-processing (if applicable)
         postProcessing.enabled = true;
+    }
+
+    private void NotifyCrops(bool isDay)
+    {
+        PlantedCrop[] allCrops = FindObjectsOfType<PlantedCrop>();
+        foreach (PlantedCrop crop in allCrops)
+        {
+            if (isDay)
+            {
+                crop.ResumeGrowth();
+            }
+            else
+            {
+                crop.PauseGrowth();
+            }
+        }
     }
 }

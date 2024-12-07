@@ -18,6 +18,10 @@ public class ShopManager : MonoBehaviour
     // Stamina UI levels (assign these in the Inspector)
     public GameObject[] staminaUILevels; // Array of GameObjects for each Stamina UI setup
 
+    public int potatoPrice = 5; // Price of Potato Seeds
+    public int carrotPrice = 8; // Price of Carrot Seeds
+    public int strawberryPrice = 10; // Price of Strawberry Seeds
+
     void Start()
     {
         // Get references
@@ -122,6 +126,57 @@ public class ShopManager : MonoBehaviour
         else
         {
             Debug.LogWarning($"Invalid UI index: {uiIndex}. Check staminaUILevels array!");
+        }
+    }
+
+    public void BuyPotatoSeeds()
+    {
+        if (persistentData.GetMoney() >= potatoPrice)
+        {
+            persistentData.SubtractMoney(potatoPrice);
+            persistentData.AddSeeds("Potato", 10); // Add 10 potato seeds to the player's inventory
+            Debug.Log("Bought 10 Potato Seeds!");
+
+            // Update the seed UI
+            GameObject.FindObjectOfType<GuiManager>().UpdateSeedTexts();
+        }
+        else
+        {
+            Debug.Log("Not enough money to buy Potato Seeds!");
+        }
+    }
+
+    public void BuyCarrotSeeds()
+    {
+        if (persistentData.GetMoney() >= carrotPrice)
+        {
+            persistentData.SubtractMoney(carrotPrice);
+            persistentData.AddSeeds("Carrot", 10); // Add 10 carrot seeds to the player's inventory
+            Debug.Log("Bought 10 Carrot Seeds!");
+
+            // Update the seed UI
+            GameObject.FindObjectOfType<GuiManager>().UpdateSeedTexts();
+        }
+        else
+        {
+            Debug.Log("Not enough money to buy Carrot Seeds!");
+        }
+    }
+
+    public void BuyStrawberrySeeds()
+    {
+        if (persistentData.GetMoney() >= strawberryPrice)
+        {
+            persistentData.SubtractMoney(strawberryPrice);
+            persistentData.AddSeeds("Strawberry", 10); // Add 10 strawberry seeds to the player's inventory
+            Debug.Log("Bought 10 Strawberry Seeds!");
+
+            // Update the seed UI
+            GameObject.FindObjectOfType<GuiManager>().UpdateSeedTexts();
+        }
+        else
+        {
+            Debug.Log("Not enough money to buy Strawberry Seeds!");
         }
     }
 }

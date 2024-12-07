@@ -51,6 +51,9 @@ public class PlayerMovement : MonoBehaviour
     // Animator for handling animations
     private Animator animator;
 
+    //Reference to PlantingManager
+    private PlantingManager plantingManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,14 +63,18 @@ public class PlayerMovement : MonoBehaviour
         // Animator reference
         animator = GetComponent<Animator>();
 
-        //Cursor.visible = false;
         baseCursorSprite = cursor.GetComponent<SpriteRenderer>().sprite;
 
-        //Initialize the stamina
+        // Initialize the stamina
         currentStamina = maxStamina;
 
-        //Set bar sizes
+        // Set bar sizes
         UpdateStaminaBars();
+
+        plantingManager = FindObjectOfType<PlantingManager>();
+
+        // Initialize SeedSelectionManager
+        seedSelection = FindObjectOfType<SeedSelectionManager>();
     }
 
     // Update is called once per frame
@@ -91,6 +98,12 @@ public class PlayerMovement : MonoBehaviour
             cursorHandler();
             UpdateStaminaBars();
         }
+
+        // Check for planting input
+        if (Input.GetMouseButtonDown(0)) // Left mouse button
+        {
+            PlantCrop();
+        }
     }
 
     // ================================================================================ 
@@ -110,6 +123,8 @@ public class PlayerMovement : MonoBehaviour
         //Sprint input for controller and keyboard
         controls.Player.Sprint.performed += ctx => StartSprinting();
         controls.Player.Sprint.canceled += ctx => StopSprinting();
+
+        seedSelection = FindObjectOfType<SeedSelectionManager>();
     }
 
     private void OnEnable()
@@ -366,5 +381,32 @@ public class PlayerMovement : MonoBehaviour
         currentSprintBar = newSprintBar;
         Debug.Log("Updated to new sprint bar!");
     }
-}
 
+    SeedSelectionManager seedSelection = FindObjectOfType<SeedSelectionManager>();
+
+    void PlantCrop()
+    {
+        if (plantingManager == null)
+        {
+            Debug.LogError("PlantingManager is not assigned!");
+            return;
+        }
+
+        // Get the currently selected seed from SeedSelectionManager
+        string selectedSeed = seedSelection.GetSelectedSeed();
+
+        // Get the mouse position in world space
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        mousePosition.z = 0f; // Ensure Z position is zero for 2D
+
+        // Try planting the crop
+        if (plantingManager.TryPlantCrop(selectedSeed, mousePosition))
+        {
+            Debug.Log($"Planted a {selectedSeed} crop!");
+        }
+        else
+        {
+            Debug.Log("Cannot plant here or no seeds available!");
+        }
+    }
+}

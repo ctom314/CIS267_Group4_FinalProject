@@ -80,6 +80,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CycleSeed"",
+                    ""type"": ""Button"",
+                    ""id"": ""dfa6f273-a051-45c9-b51c-6bdd816d5418"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectSeedDirect"",
+                    ""type"": ""Button"",
+                    ""id"": ""fdf15b81-fe27-43ec-84d1-9216ad4448fe"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a42b7c3-4f2e-4e6e-afb2-869b3b46b67a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -225,6 +252,72 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d98a4604-65bc-4163-9b6a-628ddc6253d2"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CycleSeed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ab51e3c-360d-44fa-b3a0-fb2c2e96fc9a"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CycleSeed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8eeafd39-05e1-46e6-a6a1-127d20afa8fc"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectSeedDirect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94e7de46-8d0e-43ea-9b1c-e5e28a056809"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectSeedDirect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e15cccf6-7863-41cf-9abe-6895beabc716"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectSeedDirect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90ef0037-ac3d-42db-b7f9-c3677bad49bf"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -239,6 +332,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_rightTrigger = m_Player.FindAction("rightTrigger", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Back = m_Player.FindAction("Back", throwIfNotFound: true);
+        m_Player_CycleSeed = m_Player.FindAction("CycleSeed", throwIfNotFound: true);
+        m_Player_SelectSeedDirect = m_Player.FindAction("SelectSeedDirect", throwIfNotFound: true);
+        m_Player_LeftClick = m_Player.FindAction("LeftClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -306,6 +402,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_rightTrigger;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Back;
+    private readonly InputAction m_Player_CycleSeed;
+    private readonly InputAction m_Player_SelectSeedDirect;
+    private readonly InputAction m_Player_LeftClick;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -316,6 +415,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @rightTrigger => m_Wrapper.m_Player_rightTrigger;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Back => m_Wrapper.m_Player_Back;
+        public InputAction @CycleSeed => m_Wrapper.m_Player_CycleSeed;
+        public InputAction @SelectSeedDirect => m_Wrapper.m_Player_SelectSeedDirect;
+        public InputAction @LeftClick => m_Wrapper.m_Player_LeftClick;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -343,6 +445,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Back.started += instance.OnBack;
             @Back.performed += instance.OnBack;
             @Back.canceled += instance.OnBack;
+            @CycleSeed.started += instance.OnCycleSeed;
+            @CycleSeed.performed += instance.OnCycleSeed;
+            @CycleSeed.canceled += instance.OnCycleSeed;
+            @SelectSeedDirect.started += instance.OnSelectSeedDirect;
+            @SelectSeedDirect.performed += instance.OnSelectSeedDirect;
+            @SelectSeedDirect.canceled += instance.OnSelectSeedDirect;
+            @LeftClick.started += instance.OnLeftClick;
+            @LeftClick.performed += instance.OnLeftClick;
+            @LeftClick.canceled += instance.OnLeftClick;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -365,6 +476,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Back.started -= instance.OnBack;
             @Back.performed -= instance.OnBack;
             @Back.canceled -= instance.OnBack;
+            @CycleSeed.started -= instance.OnCycleSeed;
+            @CycleSeed.performed -= instance.OnCycleSeed;
+            @CycleSeed.canceled -= instance.OnCycleSeed;
+            @SelectSeedDirect.started -= instance.OnSelectSeedDirect;
+            @SelectSeedDirect.performed -= instance.OnSelectSeedDirect;
+            @SelectSeedDirect.canceled -= instance.OnSelectSeedDirect;
+            @LeftClick.started -= instance.OnLeftClick;
+            @LeftClick.performed -= instance.OnLeftClick;
+            @LeftClick.canceled -= instance.OnLeftClick;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -390,5 +510,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnRightTrigger(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnBack(InputAction.CallbackContext context);
+        void OnCycleSeed(InputAction.CallbackContext context);
+        void OnSelectSeedDirect(InputAction.CallbackContext context);
+        void OnLeftClick(InputAction.CallbackContext context);
     }
 }

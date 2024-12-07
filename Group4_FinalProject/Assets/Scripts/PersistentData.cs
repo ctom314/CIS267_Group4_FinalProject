@@ -20,6 +20,7 @@ public class PersistentData : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            InitializeSeedInventory();
         }
         else
         {
@@ -307,4 +308,97 @@ public class PersistentData : MonoBehaviour
         Debug.Log("Fading back in...");
         yield return StartCoroutine(FadeManager.instance.FadeIn(2f));
     }
+
+    // ====================================================================================
+    //                                      SEED DATA
+    // ====================================================================================
+
+    private Dictionary<string, int> seedInventory = new Dictionary<string, int>();
+
+    // Initialize seed inventory with 0 seeds for each type
+    private void InitializeSeedInventory()
+    {
+        seedInventory["Potato"] = 0;
+        seedInventory["Carrot"] = 0;
+        seedInventory["Strawberry"] = 0;
+        // Add more crops as needed
+    }
+
+    // Add seeds to the player's inventory
+    public void AddSeeds(string seedName, int quantity)
+    {
+        if (seedInventory.ContainsKey(seedName))
+        {
+            seedInventory[seedName] += quantity;
+            Debug.Log($"Added {quantity} {seedName} seeds. Total: {seedInventory[seedName]}");
+        }
+        else
+        {
+            Debug.LogError($"Seed type '{seedName}' does not exist in inventory.");
+        }
+    }
+
+    // Get the number of seeds of a specific type
+    public int GetSeedCount(string seedName)
+    {
+        if (seedInventory.ContainsKey(seedName))
+        {
+            return seedInventory[seedName];
+        }
+        else
+        {
+            Debug.LogError($"Seed type '{seedName}' does not exist in inventory.");
+            return 0;
+        }
+    }
+
+    // Use seeds from the inventory
+    // Returns true if successful, false if not enough seeds
+    public bool UseSeed(string seedName)
+    {
+        if (seedInventory.ContainsKey(seedName))
+        {
+            if (seedInventory[seedName] > 0)
+            {
+                seedInventory[seedName]--;
+                Debug.Log($"Used 1 {seedName} seed. Remaining: {seedInventory[seedName]}");
+                return true;
+            }
+            else
+            {
+                Debug.LogWarning($"No {seedName} seeds available to use.");
+                return false;
+            }
+        }
+        else
+        {
+            Debug.LogError($"Seed type '{seedName}' does not exist in inventory.");
+            return false;
+        }
+    }
+
+    private Dictionary<string, int> siloContents = new Dictionary<string, int>
+{
+    { "Potato", 0 },
+    { "Carrot", 0 },
+    { "Strawberry", 0 }
+};
+
+    public void AddCropToSilo(string cropType, int amount)
+    {
+        if (siloContents.ContainsKey(cropType))
+        {
+            siloContents[cropType] += amount;
+        }
+        else
+        {
+            Debug.LogWarning($"Invalid crop type: {cropType}");
+        }
+    }
+
+    public int GetCropCount(string cropType)
+    {
+        return siloContents.ContainsKey(cropType) ? siloContents[cropType] : 0;
+    }
+
 }
