@@ -25,8 +25,19 @@ public class ShopManager : MonoBehaviour
     void Start()
     {
         // Get references
-        playerMovement = FindObjectOfType<PlayerMovement>();
         persistentData = PersistentData.instance;
+        if (persistentData == null)
+        {
+            Debug.LogError("PersistentData is not initialized!");
+            return;
+        }
+
+        playerMovement = FindObjectOfType<PlayerMovement>();
+        if (playerMovement == null)
+        {
+            Debug.LogError("PlayerMovement script not found!");
+            return;
+        }
 
         // Initialize the button and text
         UpdateShopUI();
@@ -68,7 +79,7 @@ public class ShopManager : MonoBehaviour
         if (persistentData.GetMoney() >= upgradeCost)
         {
             // Deduct money
-            persistentData.SetMoney(persistentData.GetMoney() - upgradeCost);
+            persistentData.SubtractMoney(upgradeCost);
             Debug.Log($"Money deducted: {upgradeCost}. Remaining money: {persistentData.GetMoney()}");
 
             // Upgrade stamina in the PlayerMovement script
@@ -78,10 +89,8 @@ public class ShopManager : MonoBehaviour
             // Increment stamina level BEFORE updating the UI
             currentStaminaLevel++;
 
-            // Update the stamina UI
+            // Update both the stamina UI and the shop UI
             UpdateStaminaUI();
-
-            // Update the shop UI
             UpdateShopUI();
         }
         else

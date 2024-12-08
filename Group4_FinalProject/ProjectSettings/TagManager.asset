@@ -9,6 +9,8 @@ TagManager:
   - Interactable
   - PlantingSpot
   - Crops
+  - Crop
+  - Harvestable
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - Base
   - Enemy
   - Player
-  - 
+  - Harvestable
   - PostProcessing
   - Interactive
   - EditorOnly

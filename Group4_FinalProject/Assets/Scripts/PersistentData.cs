@@ -318,10 +318,9 @@ public class PersistentData : MonoBehaviour
     // Initialize seed inventory with 0 seeds for each type
     private void InitializeSeedInventory()
     {
-        seedInventory["Potato"] = 0;
-        seedInventory["Carrot"] = 0;
-        seedInventory["Strawberry"] = 0;
-        // Add more crops as needed
+        if (!seedInventory.ContainsKey("Potato")) seedInventory["Potato"] = 0;
+        if (!seedInventory.ContainsKey("Carrot")) seedInventory["Carrot"] = 0;
+        if (!seedInventory.ContainsKey("Strawberry")) seedInventory["Strawberry"] = 0;
     }
 
     // Add seeds to the player's inventory
@@ -400,5 +399,4 @@ public class PersistentData : MonoBehaviour
     {
         return siloContents.ContainsKey(cropType) ? siloContents[cropType] : 0;
     }
-
 }

@@ -11,42 +11,46 @@ public class Silo : MonoBehaviour
         public string name;
         public int amount;
         public Sprite cropImage;
+        public string cropType;
     }
 
     private CropObject[] crops;
     private List<siloData> siloDataList = new List<siloData>();
-    private void Start() 
+    private void Start()
     {
         crops = Resources.LoadAll<CropObject>("Crops");
 
-        foreach(var c in crops)
+        foreach (var c in crops)
         {
             siloData sd = new siloData();
             sd.amount = 0;
             sd.name = c.name;
             sd.cropImage = c.cropIcon;
+            sd.cropType = c.name; // Set cropType based on the crop's name
             siloDataList.Add(sd);
         }
     }
 
     public void addCrops(int cropGained, string cropName)
     {
-        siloData sd = new siloData();
-        sd.name = cropName;
         int id = siloDataList.FindIndex(sd => sd.name == cropName);
-        sd.amount = siloDataList[id].amount;
-        sd.amount += cropGained;
-        siloDataList[id] = sd;
+        if (id != -1)
+        {
+            siloData sd = siloDataList[id];
+            sd.amount += cropGained;
+            siloDataList[id] = sd;
+        }
     }
 
     public void RemoveCrops(int cropGained, string cropName)
     {
-        siloData sd = new siloData();
-        sd.name = cropName;
         int id = siloDataList.FindIndex(sd => sd.name == cropName);
-        sd.amount = siloDataList[id].amount;
-        sd.amount -= cropGained;
-        siloDataList[id] = sd;
+        if (id != -1)
+        {
+            siloData sd = siloDataList[id];
+            sd.amount = Mathf.Max(0, sd.amount - cropGained); // Prevent negative amounts
+            siloDataList[id] = sd;
+        }
     }
 
     public bool hasEnough(int cropsNeeded, string cropName)

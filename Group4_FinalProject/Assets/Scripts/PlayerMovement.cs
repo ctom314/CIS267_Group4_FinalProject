@@ -54,6 +54,9 @@ public class PlayerMovement : MonoBehaviour
     //Reference to PlantingManager
     private PlantingManager plantingManager;
 
+    // Declaration of SeedSelectionManager
+    private SeedSelectionManager seedSelection;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,6 +78,10 @@ public class PlayerMovement : MonoBehaviour
 
         // Initialize SeedSelectionManager
         seedSelection = FindObjectOfType<SeedSelectionManager>();
+        if (seedSelection == null)
+        {
+            Debug.LogError("SeedSelectionManager not found in the scene!");
+        }
     }
 
     // Update is called once per frame
@@ -123,8 +130,6 @@ public class PlayerMovement : MonoBehaviour
         //Sprint input for controller and keyboard
         controls.Player.Sprint.performed += ctx => StartSprinting();
         controls.Player.Sprint.canceled += ctx => StopSprinting();
-
-        seedSelection = FindObjectOfType<SeedSelectionManager>();
     }
 
     private void OnEnable()
@@ -382,8 +387,6 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Updated to new sprint bar!");
     }
 
-    SeedSelectionManager seedSelection = FindObjectOfType<SeedSelectionManager>();
-
     void PlantCrop()
     {
         if (plantingManager == null)
@@ -392,21 +395,62 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // Get the currently selected seed from SeedSelectionManager
-        string selectedSeed = seedSelection.GetSelectedSeed();
-
         // Get the mouse position in world space
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mousePosition.z = 0f; // Ensure Z position is zero for 2D
 
-        // Try planting the crop
-        if (plantingManager.TryPlantCrop(selectedSeed, mousePosition))
+        // Call the central HandleAction method in PlantingManager
+        plantingManager.HandleAction(mousePosition);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log($"Collision detected with {collision.name}, Tag: {collision.tag}");
+
+        // Ignore crops that are not fully grown
+        if (collision.CompareTag("Crops"))
         {
-            Debug.Log($"Planted a {selectedSeed} crop!");
+            Debug.Log($"Collision ignored. {collision.name} is still growing.");
+            return;
+        }
+
+        // Check if the player collides with a harvestable crop
+        if (collision.CompareTag("Harvestable"))
+        {
+            PlantedCrop plantedCrop = collision.GetComponent<PlantedCrop>();
+            if (plantedCrop != null && !plantedCrop.isGrowing)
+            {
+                HarvestableCrop harvestableCrop = collision.GetComponent<HarvestableCrop>();
+                if (harvestableCrop != null)
+                {
+                    Debug.Log($"Harvesting crop: {harvestableCrop.cropType}");
+
+                    // Add the harvested crop to the silo
+                    PersistentData.instance.AddCropToSilo(harvestableCrop.cropType, 1);
+
+                    // Update the UI
+                    GuiManager guiManager = FindObjectOfType<GuiManager>();
+                    if (guiManager != null)
+                    {
+                        guiManager.UpdateHarvestTexts();
+                    }
+
+                    // Destroy the crop after harvesting
+                    Destroy(collision.gameObject);
+                }
+                else
+                {
+                    Debug.LogWarning("No HarvestableCrop script found on collision object.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Crop is not ready for harvesting or is still growing.");
+            }
         }
         else
         {
-            Debug.Log("Cannot plant here or no seeds available!");
+            Debug.LogWarning("Collided object is not tagged as Harvestable.");
         }
     }
 }

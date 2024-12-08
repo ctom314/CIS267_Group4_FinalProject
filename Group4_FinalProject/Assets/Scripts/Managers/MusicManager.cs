@@ -5,12 +5,10 @@ using UnityEngine.SceneManagement;
 public class MusicManager : MonoBehaviour
 {
     [Header("Music Tracks")]
-
     public AudioClip dayMusic;
     public AudioClip nightMusic;
 
     [Header("Volume Controls")]
-
     [Range(0f, 1f)] public float dayMusicVolume = 0.2f;
     [Range(0f, 1f)] public float nightMusicVolume = 0.2f;
     [Range(0.1f, 5f)] public float crossfadeDuration = 3f;
@@ -31,69 +29,54 @@ public class MusicManager : MonoBehaviour
 
         Debug.Log("MusicManager initialized and set to DontDestroyOnLoad");
         DontDestroyOnLoad(gameObject);
-
         InitializeAudioSources();
 
-        // Subscribe to scene changes only for the first instance
         SceneManager.sceneLoaded += OnSceneLoaded;
-
-        // Trigger ResetMusic on initial scene
-        if (SceneManager.GetActiveScene().isLoaded)
-        {
-            Debug.Log("Initial scene already loaded. Calling ResetMusic.");
-            ResetMusic(SceneManager.GetActiveScene().name);
-        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"Scene loaded: {scene.name}, LoadSceneMode: {mode}");
 
-        // Avoid unnecessary duplicate handling
         if (scene.name == "MainMenu")
         {
+            ResetMusic();
             StopMusic();
-            Debug.Log("Music stopped for MainMenu.");
-            return;
         }
-
-        ResetMusic(scene.name);
+        else if (scene.name == "SpringMap")
+        {
+            ResetMusic();
+            PlayDayTrack();
+        }
+        else if (scene.name.Contains("Night"))
+        {
+            ResetMusic();
+            PlayNightTrack();
+        }
     }
 
     private void OnDestroy()
     {
-        // Unsubscribe from scene changes to avoid memory leaks
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void PlayDayTrack()
     {
-        InitializeAudioSources(); // Ensure audio sources are initialized
+        InitializeAudioSources();
+        if (dayMusic == null) return;
 
-        if (dayMusic == null)
+        if (!isFading || audioSource1.clip != dayMusic && audioSource2.clip != dayMusic)
         {
-            Debug.LogError("Day music is not assigned!");
-            return;
-        }
-
-        if (!isFading && (audioSource1.clip != dayMusic && audioSource2.clip != dayMusic))
-        {
-            Debug.Log("Starting day track...");
             StartCoroutine(CrossfadeTracks(dayMusic, dayMusicVolume));
         }
     }
 
     public void PlayNightTrack()
     {
-        InitializeAudioSources(); // Ensure audio sources are initialized
+        InitializeAudioSources();
+        if (nightMusic == null) return;
 
-        if (nightMusic == null)
-        {
-            Debug.LogError("Night music is not assigned!");
-            return;
-        }
-
-        if (!isFading && (audioSource1.clip != nightMusic && audioSource2.clip != nightMusic))
+        if (!isFading || audioSource1.clip != nightMusic && audioSource2.clip != nightMusic)
         {
             StartCoroutine(CrossfadeTracks(nightMusic, nightMusicVolume));
         }
@@ -105,14 +88,30 @@ public class MusicManager : MonoBehaviour
         audioSource2.Stop();
     }
 
+    public void PauseMusic()
+    {
+        if (audioSource1.isPlaying) audioSource1.Pause();
+        if (audioSource2.isPlaying) audioSource2.Pause();
+    }
+
+    public void ResumeMusic()
+    {
+        if (!audioSource1.isPlaying && audioSource1.clip != null) audioSource1.Play();
+        if (!audioSource2.isPlaying && audioSource2.clip != null) audioSource2.Play();
+    }
+
+    public void FadeOutMusic(float duration)
+    {
+        StartCoroutine(FadeOut(duration));
+    }
+
+    public void FadeInMusic(AudioClip newTrack, float newVolume, float duration)
+    {
+        StartCoroutine(FadeIn(newTrack, newVolume, duration));
+    }
+
     private IEnumerator CrossfadeTracks(AudioClip newTrack, float newVolume)
     {
-        if (audioSource1 == null || audioSource2 == null)
-        {
-            Debug.LogWarning("Audio sources are null. Reinitializing.");
-            InitializeAudioSources();
-        }
-
         isFading = true;
 
         AudioSource activeSource = audioSource1.isPlaying ? audioSource1 : audioSource2;
@@ -139,40 +138,6 @@ public class MusicManager : MonoBehaviour
         idleSource.volume = newVolume;
 
         isFading = false;
-    }
-
-    public void PauseMusic()
-    {
-        if (audioSource1.isPlaying)
-        {
-            audioSource1.Pause();
-        }
-        if (audioSource2.isPlaying)
-        {
-            audioSource2.Pause();
-        }
-    }
-
-    public void ResumeMusic()
-    {
-        if (!audioSource1.isPlaying && audioSource1.clip != null)
-        {
-            audioSource1.Play();
-        }
-        if (!audioSource2.isPlaying && audioSource2.clip != null)
-        {
-            audioSource2.Play();
-        }
-    }
-
-    public void FadeOutMusic(float duration)
-    {
-        StartCoroutine(FadeOut(duration));
-    }
-
-    public void FadeInMusic(AudioClip newTrack, float newVolume, float duration)
-    {
-        StartCoroutine(FadeIn(newTrack, newVolume, duration));
     }
 
     private IEnumerator FadeOut(float duration)
@@ -213,31 +178,12 @@ public class MusicManager : MonoBehaviour
         idleSource.volume = newVolume;
     }
 
-    public void ResetMusic(string currentScene)
+    public void ResetMusic()
     {
-        Debug.Log($"ResetMusic called for scene: {currentScene}");
-
-        InitializeAudioSources(); // Reinitialize audio sources if needed
-
-        if (currentScene == "SpringMap")
-        {
-            Debug.Log("Playing day track for SpringMap");
-            PlayDayTrack();
-        }
-        else if (currentScene == "NightScene")
-        {
-            Debug.Log("Playing night track for NightScene");
-            PlayNightTrack();
-        }
-        else if (currentScene == "MainMenu")
-        {
-            Debug.Log("Stopping music for MainMenu");
-            StopMusic(); // No music in main menu
-        }
-        else
-        {
-            Debug.LogWarning($"No matching music found for scene: {currentScene}");
-        }
+        Debug.Log("Resetting MusicManager state...");
+        StopMusic();
+        audioSource1.clip = null;
+        audioSource2.clip = null;
     }
 
     public void InitializeAudioSources()
@@ -247,7 +193,6 @@ public class MusicManager : MonoBehaviour
             audioSource1 = gameObject.AddComponent<AudioSource>();
             audioSource1.loop = true;
             audioSource1.playOnAwake = false;
-            Debug.Log("Recreated audioSource1");
         }
 
         if (audioSource2 == null)
@@ -255,22 +200,6 @@ public class MusicManager : MonoBehaviour
             audioSource2 = gameObject.AddComponent<AudioSource>();
             audioSource2.loop = true;
             audioSource2.playOnAwake = false;
-            Debug.Log("Recreated audioSource2");
-        }
-    }
-
-    public void QuitToMainMenu()
-    {
-        Debug.Log("Quitting to Main Menu...");
-        Time.timeScale = 1; // Reset time scale in case of pause
-        PlayerMovement.canMove = true; // Ensure player movement resets
-
-        SceneManager.LoadScene("MainMenu");
-
-        // Ensure MusicManager resets properly
-        if (FindObjectOfType<MusicManager>() != null)
-        {
-            FindObjectOfType<MusicManager>().ResetMusic("MainMenu");
         }
     }
 }

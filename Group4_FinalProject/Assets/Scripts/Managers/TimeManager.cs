@@ -269,10 +269,12 @@ public class TimeManager : MonoBehaviour
         {
             if (isDay)
             {
+                Debug.Log($"Resuming growth for {crop.name}");
                 crop.ResumeGrowth();
             }
             else
             {
+                Debug.Log($"Pausing growth for {crop.name}");
                 crop.PauseGrowth();
             }
         }

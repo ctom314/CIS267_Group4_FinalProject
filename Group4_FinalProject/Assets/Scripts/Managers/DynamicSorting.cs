@@ -7,37 +7,68 @@ public class DynamicSorting : MonoBehaviour
     // References to other objects with SpriteRenderers
     public SpriteRenderer barnRenderer;
     public SpriteRenderer shopRenderer;
+    public SpriteRenderer siloRenderer;
 
     private void Start()
     {
         // Get the player's SpriteRenderer
         playerRenderer = GetComponent<SpriteRenderer>();
+
+        if (playerRenderer == null)
+        {
+            Debug.LogError("Player SpriteRenderer is missing!");
+        }
     }
 
     private void Update()
     {
-        // Determine sorting order relative to the barn
-        if (transform.position.y > barnRenderer.transform.position.y)
+        if (playerRenderer == null) return;
+
+        // Determine which object is closest in depth
+        SpriteRenderer closestRenderer = null;
+        float closestYDifference = float.MaxValue;
+
+        if (barnRenderer != null)
         {
-            // Player is behind the barn
-            playerRenderer.sortingOrder = barnRenderer.sortingOrder - 1;
-        }
-        else if (transform.position.y <= barnRenderer.transform.position.y)
-        {
-            // Player is in front of the barn
-            playerRenderer.sortingOrder = barnRenderer.sortingOrder + 1;
+            float yDifference = Mathf.Abs(transform.position.y - barnRenderer.transform.position.y);
+            if (yDifference < closestYDifference)
+            {
+                closestYDifference = yDifference;
+                closestRenderer = barnRenderer;
+            }
         }
 
-        // Determine sorting order relative to the shop
-        if (transform.position.y > shopRenderer.transform.position.y)
+        if (shopRenderer != null)
         {
-            // Player is behind the shop
-            playerRenderer.sortingOrder = Mathf.Max(playerRenderer.sortingOrder, shopRenderer.sortingOrder - 1);
+            float yDifference = Mathf.Abs(transform.position.y - shopRenderer.transform.position.y);
+            if (yDifference < closestYDifference)
+            {
+                closestYDifference = yDifference;
+                closestRenderer = shopRenderer;
+            }
         }
-        else if (transform.position.y <= shopRenderer.transform.position.y)
+
+        if (siloRenderer != null)
         {
-            // Player is in front of the shop
-            playerRenderer.sortingOrder = Mathf.Max(playerRenderer.sortingOrder, shopRenderer.sortingOrder + 1);
+            float yDifference = Mathf.Abs(transform.position.y - siloRenderer.transform.position.y);
+            if (yDifference < closestYDifference)
+            {
+                closestYDifference = yDifference;
+                closestRenderer = siloRenderer;
+            }
+        }
+
+        // Apply sorting order based on the closest object
+        if (closestRenderer != null)
+        {
+            if (transform.position.y > closestRenderer.transform.position.y)
+            {
+                playerRenderer.sortingOrder = closestRenderer.sortingOrder - 1; // Behind
+            }
+            else
+            {
+                playerRenderer.sortingOrder = closestRenderer.sortingOrder + 1; // In front
+            }
         }
     }
 }
