@@ -1,13 +1,20 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class ShopInteract : MonoBehaviour
 {
     public GameObject shopMenu; // Assign the Shop UI menu here
-    //public GameObject darkBackground;
 
     // Shop buttons
     public GameObject shopFirstButton;
+
+    // Shop Money Display
+    public GameObject shopMoneyTxt;
+
+    // Normal Money UI
+    public GameObject moneyTxt;
+    public GameObject moneyIcon;
 
     public static bool isShopOpen = false;
 
@@ -66,12 +73,23 @@ public class ShopInteract : MonoBehaviour
         }
     }
 
+    public static void updateMoneyTxt(TextMeshProUGUI moneyTxt)
+    {
+        moneyTxt.text = PersistentData.instance.GetMoney().ToString();
+    }
+
     public void OpenShopMenu()
     {
         // Activate the shop UI and optional dark background
         shopMenu.SetActive(true);
-        //darkBackground?.SetActive(true);
         isShopOpen = true;
+
+        // Hide normal money UI
+        moneyTxt.SetActive(false);
+        moneyIcon.SetActive(false);
+
+        // Update shop money display
+        updateMoneyTxt(shopMoneyTxt.GetComponent<TextMeshProUGUI>());
 
         // Setup first button
         EventSystem.current.SetSelectedGameObject(null);
@@ -85,8 +103,11 @@ public class ShopInteract : MonoBehaviour
     {
         // Deactivate the shop UI and optional dark background
         shopMenu.SetActive(false);
-        //darkBackground?.SetActive(false);
         isShopOpen = false;
+
+        // Show normal money UI
+        moneyTxt.SetActive(true);
+        moneyIcon.SetActive(true);
 
         // Enable player movement
         PlayerMovement.canMove = true;

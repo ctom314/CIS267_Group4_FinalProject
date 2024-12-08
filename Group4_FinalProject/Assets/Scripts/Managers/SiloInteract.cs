@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class SiloInteract : MonoBehaviour
 {
     public GameObject siloMenu; // Reference to the Silo Menu UI
-    public GameObject siloFirstButton; // Optional: First button for UI navigation
+    public GameObject siloFirstButton;
 
     private bool isPlayerNearby = false; // Tracks if the player is near the silo
     private PlayerControls controls;
@@ -66,6 +66,9 @@ public class SiloInteract : MonoBehaviour
 
         // Disable player movement
         PlayerMovement.canMove = false;
+
+        // Disable pausing
+        PauseManager.canPause = false;
     }
 
     public void CloseSiloMenu()
@@ -75,5 +78,8 @@ public class SiloInteract : MonoBehaviour
 
         // Enable player movement
         PlayerMovement.canMove = true;
+
+        // Enable pausing
+        PauseManager.canPause = true;
     }
 }

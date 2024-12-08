@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!pm.isPaused)
+        if (!PauseManager.isPaused)
         {
             // Get movement
             Vector2 movement = aIPath.desiredVelocity;

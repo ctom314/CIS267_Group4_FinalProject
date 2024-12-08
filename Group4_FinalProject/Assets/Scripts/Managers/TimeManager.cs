@@ -9,6 +9,7 @@ public class TimeManager : MonoBehaviour
     public float dayLengthMinutes = 7;
     public float nightLengthMinutes = 7;
     public bool isDay = true;
+    public static bool timePaused = false;
 
     // Time UI
     public Slider timeSlider;
@@ -233,7 +234,7 @@ public class TimeManager : MonoBehaviour
 
     private IEnumerator incrementTime()
     {
-        while (!pm.isPaused)
+        while (!PauseManager.isPaused && !timePaused)
         {
             // Wait 1 second
             yield return new WaitForSeconds(1);

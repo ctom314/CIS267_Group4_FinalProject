@@ -9,6 +9,13 @@ public class SeedSelectionManager : MonoBehaviour
 
     private PlayerControls controls; // Input Actions reference
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Setup initial seed selection
+        SelectSeed(0);
+    }
+
     private void Awake()
     {
         // Initialize Player Controls
@@ -17,9 +24,13 @@ public class SeedSelectionManager : MonoBehaviour
         // Hook up input actions for cycling seeds
         controls.Player.CycleSeed.performed += ctx =>
         {
-            // Determine direction (-1 for LB, +1 for RB)
-            int direction = ctx.control.name == "leftShoulder" ? -1 : 1;
-            CycleSelection(direction);
+            // Only cycle when not paused
+            if (!PauseManager.isPaused)
+            {
+                // Determine direction (-1 for LB, +1 for RB)
+                int direction = ctx.control.name == "leftShoulder" ? -1 : 1;
+                CycleSelection(direction);
+            }
         };
 
         // Hook up input actions for direct seed selection

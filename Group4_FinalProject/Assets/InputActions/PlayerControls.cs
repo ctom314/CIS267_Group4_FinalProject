@@ -107,6 +107,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PlantCrop"",
+                    ""type"": ""Button"",
+                    ""id"": ""86a6d5f6-f461-49f7-bdd6-da2cc63db468"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -318,6 +327,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""LeftClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""296533a3-e59e-4a5f-83a4-de3e78bec9fa"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PlantCrop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f2ef6561-3881-49de-8160-3a797ed910d3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PlantCrop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -335,6 +366,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_CycleSeed = m_Player.FindAction("CycleSeed", throwIfNotFound: true);
         m_Player_SelectSeedDirect = m_Player.FindAction("SelectSeedDirect", throwIfNotFound: true);
         m_Player_LeftClick = m_Player.FindAction("LeftClick", throwIfNotFound: true);
+        m_Player_PlantCrop = m_Player.FindAction("PlantCrop", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -405,6 +437,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_CycleSeed;
     private readonly InputAction m_Player_SelectSeedDirect;
     private readonly InputAction m_Player_LeftClick;
+    private readonly InputAction m_Player_PlantCrop;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -418,6 +451,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @CycleSeed => m_Wrapper.m_Player_CycleSeed;
         public InputAction @SelectSeedDirect => m_Wrapper.m_Player_SelectSeedDirect;
         public InputAction @LeftClick => m_Wrapper.m_Player_LeftClick;
+        public InputAction @PlantCrop => m_Wrapper.m_Player_PlantCrop;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -454,6 +488,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @LeftClick.started += instance.OnLeftClick;
             @LeftClick.performed += instance.OnLeftClick;
             @LeftClick.canceled += instance.OnLeftClick;
+            @PlantCrop.started += instance.OnPlantCrop;
+            @PlantCrop.performed += instance.OnPlantCrop;
+            @PlantCrop.canceled += instance.OnPlantCrop;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -485,6 +522,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @LeftClick.started -= instance.OnLeftClick;
             @LeftClick.performed -= instance.OnLeftClick;
             @LeftClick.canceled -= instance.OnLeftClick;
+            @PlantCrop.started -= instance.OnPlantCrop;
+            @PlantCrop.performed -= instance.OnPlantCrop;
+            @PlantCrop.canceled -= instance.OnPlantCrop;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -513,5 +553,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnCycleSeed(InputAction.CallbackContext context);
         void OnSelectSeedDirect(InputAction.CallbackContext context);
         void OnLeftClick(InputAction.CallbackContext context);
+        void OnPlantCrop(InputAction.CallbackContext context);
     }
 }

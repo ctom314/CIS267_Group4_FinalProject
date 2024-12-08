@@ -36,7 +36,7 @@ public class PersistentData : MonoBehaviour
         playerData.SetMaxHealth(3);
         playerData.SetHealth(playerData.GetMaxHealth());
         playerMoney = PLAYER_STARTING_MONEY;
-        isGameOver = false;
+        isWin = false;
 
         // Reset Time/Season Stats
         day = 1;
@@ -52,7 +52,7 @@ public class PersistentData : MonoBehaviour
 
     // Store player data
     private PlayerStats playerData = new PlayerStats(PlayerStats.DEFAULT_HEALTH, PlayerStats.DEFAULT_HEALTH);
-    private bool isGameOver = false;
+    public bool isWin = false;
 
     // Store crop info
     private Dictionary<string, Crop> cropData = new Dictionary<string, Crop>();
@@ -85,16 +85,16 @@ public class PersistentData : MonoBehaviour
         return playerData.GetHealth() <= 0;
     }
 
+    // Check for Win
+    public bool isPlayerWin()
+    {
+        return day > 28 && seasonId == 4;
+    }
+
     // Decrement HP
     public void decrementPlayerHP()
     {
         playerData.SetHealth(playerData.GetHealth() - 1);
-
-        // Check if player is dead
-        if (isPlayerGameOver())
-        {
-            isGameOver = true;
-        }
     }
 
 

@@ -11,7 +11,7 @@ public class PauseManager : MonoBehaviour
 
     public GameObject pauseSelectedButton;
 
-    public bool isPaused;
+    public static bool isPaused;
     public static bool canPause;
 
     // Controls

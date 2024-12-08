@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class GameOverManager : MonoBehaviour
 {
     // UI : Game Over Screen
     public GameObject gameOverScreen;
     public GameObject DarkBackground;
+
+    public TextMeshProUGUI daysSurvivedTxt;
 
     public GameObject gameOverSelectedButton;
 
@@ -49,6 +52,9 @@ public class GameOverManager : MonoBehaviour
     {
         gameOverScreen.SetActive(true);
         DarkBackground.SetActive(true);
+
+        // Display days survived
+        daysSurvivedTxt.text = "Days Survived: " + PersistentData.instance.getDay();
     }
 
     // Buttons

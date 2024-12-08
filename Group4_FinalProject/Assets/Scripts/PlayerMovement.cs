@@ -94,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (!pm.isPaused && !PersistentData.instance.isPlayerGameOver())
+        if (!PauseManager.isPaused && !PersistentData.instance.isPlayerGameOver())
         {
             if (canMove)
             {

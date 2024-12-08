@@ -8,6 +8,9 @@ public class ShopManager : MonoBehaviour
     public TextMeshProUGUI buttonText; // Reference to the button text
     public Button staminaUpgradeButton; // Reference to the stamina upgrade button
 
+    // Shop Money Display
+    public GameObject shopMoneyTxt;
+
     private int currentStaminaLevel = 1; // Tracks current stamina level
     private int[] staminaUpgradeCosts = { 500, 1000, 2000 }; // Costs for each upgrade
     private int maxStaminaLevel = 4; // Max stamina level
@@ -45,6 +48,8 @@ public class ShopManager : MonoBehaviour
         // Add listener for the button click
         staminaUpgradeButton.onClick.AddListener(UpgradeStamina);
     }
+
+    
 
     void UpdateShopUI()
     {
@@ -88,6 +93,9 @@ public class ShopManager : MonoBehaviour
 
             // Increment stamina level BEFORE updating the UI
             currentStaminaLevel++;
+
+            // Update shop money display
+            ShopInteract.updateMoneyTxt(shopMoneyTxt.GetComponent<TextMeshProUGUI>());
 
             // Update both the stamina UI and the shop UI
             UpdateStaminaUI();
@@ -146,6 +154,9 @@ public class ShopManager : MonoBehaviour
             persistentData.AddSeeds("Potato", 10); // Add 10 potato seeds to the player's inventory
             Debug.Log("Bought 10 Potato Seeds!");
 
+            // Update shop money display
+            ShopInteract.updateMoneyTxt(shopMoneyTxt.GetComponent<TextMeshProUGUI>());
+
             // Update the seed UI
             GameObject.FindObjectOfType<GuiManager>().UpdateSeedTexts();
         }
@@ -163,6 +174,9 @@ public class ShopManager : MonoBehaviour
             persistentData.AddSeeds("Carrot", 10); // Add 10 carrot seeds to the player's inventory
             Debug.Log("Bought 10 Carrot Seeds!");
 
+            // Update shop money display
+            ShopInteract.updateMoneyTxt(shopMoneyTxt.GetComponent<TextMeshProUGUI>());
+
             // Update the seed UI
             GameObject.FindObjectOfType<GuiManager>().UpdateSeedTexts();
         }
@@ -179,6 +193,9 @@ public class ShopManager : MonoBehaviour
             persistentData.SubtractMoney(strawberryPrice);
             persistentData.AddSeeds("Strawberry", 10); // Add 10 strawberry seeds to the player's inventory
             Debug.Log("Bought 10 Strawberry Seeds!");
+
+            // Update shop money display
+            ShopInteract.updateMoneyTxt(shopMoneyTxt.GetComponent<TextMeshProUGUI>());
 
             // Update the seed UI
             GameObject.FindObjectOfType<GuiManager>().UpdateSeedTexts();

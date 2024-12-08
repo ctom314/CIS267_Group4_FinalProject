@@ -42,7 +42,7 @@ public class GameButtonHandler : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) || controls.Player.rightTrigger.triggered && !pm.isPaused)
+        if(Input.GetMouseButtonDown(0) || controls.Player.rightTrigger.triggered && !PauseManager.isPaused)
         {
             clickAction();
         }

@@ -57,7 +57,7 @@ public class SpawnerManager : MonoBehaviour
     {
 
         // Only spawn enemies at night, when it's not paused
-        while (!pm.isPaused)
+        while (!PauseManager.isPaused)
         {
             yield return new WaitForSeconds(spawnTime);
 
