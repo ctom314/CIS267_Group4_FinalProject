@@ -10,20 +10,12 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 10;
     public int damage = 1;
 
-    // Sprites
-    public Sprite upSprite;
-    public Sprite downSprite;
-    public Sprite leftSprite;
-    public Sprite rightSprite;
-
     private PauseManager pm;
     private HealthManager hm;
 
     private AIPath aIPath;
     private AIDestinationSetter destSetter;
-    private SpriteRenderer sr;
-
-    
+    private Animator animator; // Reference to Animator
 
     // TEMP
     private GameObject player;
@@ -42,48 +34,43 @@ public class Enemy : MonoBehaviour
         // Set the enemy to track the player
         destSetter.target = player.transform;
 
-        // Get child sprite renderer
-        sr = GetComponentInChildren<SpriteRenderer>();
+        // Get the Animator component
+        animator = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (!PauseManager.isPaused)
         {
-            // Get movement
+            // Get the enemy's movement direction
             Vector2 movement = aIPath.desiredVelocity;
 
-            // Update sprite
-            updateSprite(movement);
+            // Update the Animator parameters
+            UpdateAnimationParameters(movement);
         }
     }
 
-    // Change sprite based on which direction the enemy is moving
-    private void updateSprite(Vector2 movement)
+    private void UpdateAnimationParameters(Vector2 movement)
     {
-        float threshold = 0.5f;
+        if (movement.magnitude > 0.1f) // Check if the enemy is moving
+        {
+            // Normalize the movement vector for consistent direction
+            Vector2 normalizedMovement = movement.normalized;
 
-        if (movement.y > threshold)
-        {
-            // Moving up
-            sr.sprite = upSprite;
+            // Update Animator parameters
+            animator.SetFloat("MoveX", normalizedMovement.x);
+            animator.SetFloat("MoveY", normalizedMovement.y);
+            animator.SetBool("isMoving", true); // Set isMoving to true
         }
-        else if (movement.y < -threshold)
+        else
         {
-            // Moving down
-            sr.sprite = downSprite;
+            // Enemy is not moving
+            animator.SetBool("isMoving", false); // Set isMoving to false
         }
-        else if (movement.x > threshold)
-        {
-            // Moving right
-            sr.sprite = rightSprite;
-        }
-        else if (movement.x < -threshold)
-        {
-            // Moving left
-            sr.sprite = leftSprite;
-        }
+
+        // Debugging logs
+        Debug.Log($"Updating Animator: MoveX = {movement.x}, MoveY = {movement.y}");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -105,5 +92,8 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    
+    public void TakeDamage()
+    {
+        Destroy(gameObject); // Destroy the enemy object
+    }
 }

@@ -87,9 +87,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PlantCrop",
+                    "name": "Plant",
                     "type": "Button",
                     "id": "86a6d5f6-f461-49f7-bdd6-da2cc63db468",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Weapon",
+                    "type": "Button",
+                    "id": "cc6e50f6-0fd7-4c86-bc5b-d7c44d0cb850",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -313,7 +322,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PlantCrop",
+                    "action": "Plant",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -324,7 +333,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PlantCrop",
+                    "action": "Plant",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fb4c7719-e5da-48a3-8eac-4bec2780dc32",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

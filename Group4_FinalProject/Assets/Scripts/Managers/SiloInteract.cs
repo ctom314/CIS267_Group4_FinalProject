@@ -6,8 +6,14 @@ public class SiloInteract : MonoBehaviour
     public GameObject siloMenu; // Reference to the Silo Menu UI
     public GameObject siloFirstButton;
 
+    public static bool isSiloOpen = false;
+
     private bool isPlayerNearby = false; // Tracks if the player is near the silo
     private PlayerControls controls;
+
+    // ================================================================================ 
+    //                                CONTROLLER INPUT 
+    // ================================================================================ 
 
     private void Awake()
     {
@@ -59,6 +65,7 @@ public class SiloInteract : MonoBehaviour
     {
         // Activate the Silo Menu UI
         siloMenu.SetActive(true);
+        isSiloOpen = true;
 
         // Optional: Set the first button for UI navigation
         EventSystem.current.SetSelectedGameObject(null);
@@ -73,8 +80,9 @@ public class SiloInteract : MonoBehaviour
 
     public void CloseSiloMenu()
     {
-        // Deactivate the Silo Menu UI
         siloMenu.SetActive(false);
+        // Deactivate the Silo Menu UI
+        isSiloOpen = false;
 
         // Enable player movement
         PlayerMovement.canMove = true;

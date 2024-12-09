@@ -229,7 +229,7 @@ public class PersistentData : MonoBehaviour
     // ====================================================================================
 
     // Starting money amount
-    public static readonly int PLAYER_STARTING_MONEY = 1000; // Starting money amount (set default as needed)
+    public static readonly int PLAYER_STARTING_MONEY = 50; // Starting money amount (set default as needed)
 
     private int playerMoney; 
 

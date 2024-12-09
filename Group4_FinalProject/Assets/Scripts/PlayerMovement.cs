@@ -148,7 +148,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void move()
     {
-
         // Stop movement if any menu is open
         if (!canMove)
         {
@@ -162,22 +161,26 @@ public class PlayerMovement : MonoBehaviour
         // Check if the player is moving
         bool isMoving = movement != Vector2.zero;
 
-        // Activate sprinting if conditions are met (button is held and the player starts moving)
+        // Update animator direction when moving
+        if (isMoving)
+        {
+            animator.SetFloat("LastInputX", movement.x);
+            animator.SetFloat("LastInputY", movement.y);
+        }
+
+        // Sprint handling
         if (isSprinting && isMoving && currentStamina > 0)
         {
             moveSpeed *= sprintMultiplier;
 
             // Drain stamina and immediately update UI
             currentStamina = Mathf.Max(0, currentStamina - Time.deltaTime);
-            UpdateStaminaBars(); // Update UI immediately after draining
+            UpdateStaminaBars();
 
-            // Stop sprinting if stamina depletes
             if (currentStamina <= 0)
             {
                 currentStamina = 0;
                 isSprinting = false;
-
-                // Start recovery phase
                 recoveringFromDepletion = true;
                 StartCoroutine(RecoverFromDepletion());
             }
@@ -189,30 +192,26 @@ public class PlayerMovement : MonoBehaviour
             {
                 currentStamina += staminaRecoveryRate * Time.deltaTime;
 
-                // If fully refilled, exit recovery phase
                 if (currentStamina >= maxStamina)
                 {
                     currentStamina = maxStamina;
                     recoveringFromDepletion = false;
-
-                    // Trigger flash effect only after full recovery
                     StartCoroutine(FlashStaminaBar());
                 }
             }
             else
             {
-                // Regular recovery (non-depleted stamina)
                 currentStamina += staminaRecoveryRate * Time.deltaTime;
                 currentStamina = Mathf.Min(currentStamina, maxStamina);
             }
 
-            UpdateStaminaBars(); // Update UI immediately during recovery
+            UpdateStaminaBars();
         }
 
         // Apply movement
         rb.velocity = moveSpeed * movement;
 
-        // Check if sprinting should be re-enabled after starting movement
+        // Re-enable sprinting if conditions are met
         if (isMoving && !isSprinting && controls.Player.Sprint.IsPressed() && currentStamina > 0 && !recoveringFromDepletion)
         {
             isSprinting = true;
@@ -453,4 +452,19 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogWarning("Collided object is not tagged as Harvestable.");
         }
     }
+
+    public Vector2 GetFacingDirection()
+    {
+        // Retrieve the last direction the player was facing
+        return new Vector2(
+            animator.GetFloat("LastInputX"),
+            animator.GetFloat("LastInputY")
+        ).normalized;
+    }
+
+    public Vector2 GetMovementInput()
+    {
+        return movement; // Current input vector (updated from controls)
+    }
+
 }
