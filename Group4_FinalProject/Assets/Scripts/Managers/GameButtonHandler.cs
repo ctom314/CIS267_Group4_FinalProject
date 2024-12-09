@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameButtonHandler : MonoBehaviour
 {
-    public GameObject cursorObj;
     public LayerMask interactiveLayer;
     public PersistentData pd;
 
@@ -92,9 +91,13 @@ public class GameButtonHandler : MonoBehaviour
 
     private void clickAction()
     {
-        Vector3 cursorPos = cursorObj.transform.position;
-        CircleCollider2D cursorCollider = cursorObj.GetComponent<CircleCollider2D>();
-        Collider2D tester = Physics2D.OverlapCircle(cursorPos, cursorCollider.radius*2, interactiveLayer);
+        // Get the cursor position
+        Vector3 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        cursorPos.z = 0;
+
+        // Get a small radius around the cursor
+        float radius = 0.1f;
+        Collider2D tester = Physics2D.OverlapCircle(cursorPos, radius, interactiveLayer);
 
         if(tester != null)
         {

@@ -15,7 +15,7 @@ public class PitchforkController : MonoBehaviour
     public Vector2 offsetLeft = new Vector2(-0.5f, 0);
     public Vector2 offsetRight = new Vector2(0.5f, 0);
 
-    private bool canJab = true; // Tracks whether the player can jab
+    public static bool canJab = true; // Tracks whether the player can jab
     private Vector2 facingDirection; // Direction the player is facing
     private PlayerMovement playerMovement; // Reference to the PlayerMovement script
 
@@ -82,21 +82,27 @@ public class PitchforkController : MonoBehaviour
         // Position and rotate the pitchfork
         UpdatePitchforkTransform();
 
-        // Check for enemies in range
-        Collider2D[] enemiesHit = Physics2D.OverlapBoxAll(
-            pitchfork.transform.position,
-            new Vector2(1, 1), // Adjust size for detection
-            pitchfork.transform.eulerAngles.z,
-            LayerMask.GetMask("Enemy")
-        );
+        float elapsedTime = 0f;
 
-        foreach (Collider2D enemy in enemiesHit)
+        while (elapsedTime < jabDuration)
         {
-            Destroy(enemy.gameObject);
-        }
+            // Check for enemies in range
+            Collider2D[] enemiesHit = Physics2D.OverlapBoxAll(
+                pitchfork.transform.position,
+                new Vector2(1, 1), // Adjust size for detection
+                pitchfork.transform.eulerAngles.z,
+                LayerMask.GetMask("Enemy")
+            );
 
-        // Wait for the jab duration
-        yield return new WaitForSeconds(jabDuration);
+            foreach (Collider2D enemy in enemiesHit)
+            {
+                Destroy(enemy.gameObject);
+            }
+
+            // Next frame
+            yield return null;
+            elapsedTime += Time.deltaTime;
+        }
 
         pitchfork.SetActive(false); // Hide the pitchfork
 
@@ -106,63 +112,71 @@ public class PitchforkController : MonoBehaviour
         canJab = true; // Allow jabs again
     }
 
+    private int playerFacingDirection(Sprite s)
+    {
+        // 0: Up
+        // 1: Down
+        // 2: Left
+        // 3: Right
+        // -1: Unknown
+
+        if (s.name.Contains("Up"))
+        {
+            return 0;
+        }
+        else if (s.name.Contains("Down"))
+        {
+            return 1;
+        }
+        else if (s.name.Contains("Left"))
+        {
+            return 2;
+        }
+        else if (s.name.Contains("Right"))
+        {
+            return 3;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
     private void UpdatePitchforkTransform()
     {
-        // Get player's movement input and last input directions
-        Vector2 currentMovement = playerMovement.GetMovementInput(); // Retrieve raw input
-        Animator animator = playerMovement.GetComponent<Animator>();
-        float lastInputX = animator.GetFloat("LastInputX");
-        float lastInputY = animator.GetFloat("LastInputY");
+        // Get player's sprite and which direction its facing
+        SpriteRenderer playerSprite = playerMovement.GetComponent<SpriteRenderer>();
+        int playerDir = playerFacingDirection(playerSprite.sprite);
 
         Vector3 offset = Vector3.zero;
         float rotation = 0f;
 
-        // Determine direction based on movement or fallback to last facing direction
-        if (currentMovement != Vector2.zero) // If the player is moving
+        // Get rotation and offset based on player's facing direction
+        if (playerDir != -1)
         {
-            // Use current movement direction
-            if (currentMovement.x > 0.1f) // Moving right
+            if (playerDir == 0)
             {
-                offset = offsetRight;
-                rotation = 0f;
-            }
-            else if (currentMovement.x < -0.1f) // Moving left
-            {
-                offset = offsetLeft;
-                rotation = 180f;
-            }
-            else if (currentMovement.y > 0.1f) // Moving up
-            {
+                // Up
                 offset = offsetUp;
                 rotation = 90f;
             }
-            else if (currentMovement.y < -0.1f) // Moving down
+            else if (playerDir == 1)
             {
+                // Down
                 offset = offsetDown;
                 rotation = -90f;
             }
-        }
-        else // Use last facing direction
-        {
-            if (lastInputX > 0.1f) // Facing right
+            else if (playerDir == 2)
             {
-                offset = offsetRight;
-                rotation = 0f;
-            }
-            else if (lastInputX < -0.1f) // Facing left
-            {
+                // Left
                 offset = offsetLeft;
                 rotation = 180f;
             }
-            else if (lastInputY > 0.1f) // Facing up
+            else if (playerDir == 3)
             {
-                offset = offsetUp;
-                rotation = 90f;
-            }
-            else if (lastInputY < -0.1f) // Facing down
-            {
-                offset = offsetDown;
-                rotation = -90f;
+                // Right
+                offset = offsetRight;
+                rotation = 0f;
             }
         }
 

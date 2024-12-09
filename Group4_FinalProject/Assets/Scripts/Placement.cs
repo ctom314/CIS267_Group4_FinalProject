@@ -24,7 +24,6 @@ public class Placement : MonoBehaviour
     private Color baseColor;
     private Collider2D prefabCollider;
     public bool startPlacement;
-    public GameObject cursor;
     private PlayerControls controls;
     private void Start() 
     {
@@ -37,7 +36,11 @@ public class Placement : MonoBehaviour
         //spawn in the prefab, save the base color, set the color to a transparent green
         if(startPlacement && !moving)
         {
-            tempPrefab = Instantiate(PlacementPrefab, cursor.transform.position, Quaternion.identity);
+            // Get the cursor position
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+
+            tempPrefab = Instantiate(PlacementPrefab, mousePos, Quaternion.identity);
             baseColor = tempPrefab.GetComponent<SpriteRenderer>().color;
             prefabCollider = tempPrefab.GetComponent<Collider2D>();
             moving = true;
@@ -46,7 +49,11 @@ public class Placement : MonoBehaviour
         //follow the mouse
         if(moving)
         {
-            tempPrefab.transform.position = cursor.transform.position;
+            // Get the cursor position
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+
+            tempPrefab.transform.position = mousePos;
         }
 
         //place the prefab and set the color back to it's normal color

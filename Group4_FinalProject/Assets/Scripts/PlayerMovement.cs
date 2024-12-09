@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,8 +31,6 @@ public class PlayerMovement : MonoBehaviour
 
     // Controller movement
     private PlayerControls controls;
-    public GameObject cursor;
-    public Sprite cursorSpriteClicked;
     private Sprite baseCursorSprite;
     public bool controller;
 
@@ -66,7 +65,6 @@ public class PlayerMovement : MonoBehaviour
         // Animator reference
         animator = GetComponent<Animator>();
 
-        baseCursorSprite = cursor.GetComponent<SpriteRenderer>().sprite;
 
         // Initialize the stamina
         currentStamina = maxStamina;
@@ -74,7 +72,8 @@ public class PlayerMovement : MonoBehaviour
         // Set bar sizes
         UpdateStaminaBars();
 
-        plantingManager = FindObjectOfType<PlantingManager>();
+        plantingManager = GameObject.Find("GameManager").GetComponent<PlantingManager>();
+        Debug.Log("PlantingManager found: " + plantingManager);
 
         // Initialize SeedSelectionManager
         seedSelection = FindObjectOfType<SeedSelectionManager>();
@@ -102,14 +101,11 @@ public class PlayerMovement : MonoBehaviour
                 updateSprite();
             }
 
-            cursorHandler();
+            //cursorHandler();
             UpdateStaminaBars();
-        }
 
-        // Check for planting input
-        if (Input.GetMouseButtonDown(0)) // Left mouse button
-        {
-            PlantCrop();
+            // Handle control scheme changes
+            handleControlScheme();
         }
     }
 
@@ -130,6 +126,9 @@ public class PlayerMovement : MonoBehaviour
         //Sprint input for controller and keyboard
         controls.Player.Sprint.performed += ctx => StartSprinting();
         controls.Player.Sprint.canceled += ctx => StopSprinting();
+
+        // Planting crops
+        controls.Player.Plant.performed += ctx => PlantCrop();
     }
 
     private void OnEnable()
@@ -142,6 +141,13 @@ public class PlayerMovement : MonoBehaviour
     {
         controls.Player.Disable();
         Debug.Log("Player Controls Disabled");
+    }
+
+    private void handleControlScheme()
+    {
+        // Update control scheme based on device type
+        InputDevice lastDevice = InputSystem.devices.FirstOrDefault(device => device.lastUpdateTime == InputSystem.devices.Max(d => d.lastUpdateTime));
+        controller = lastDevice is Gamepad;
     }
 
     // ================================================================================ 
@@ -241,38 +247,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             animator.speed = 1.0f; // Normal animation speed
-        }
-    }
-
-    private void cursorHandler()
-    {
-        if (!controller)
-        {
-            curPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
-        }
-        else if (controller)
-        {
-            controls.Player.MoveCursor.performed += ctx => curPos = ctx.ReadValue<Vector2>();
-            controls.Player.MoveCursor.canceled += ctx => curPos = Vector3.zero;
-        }
-
-        if (controller)
-        {
-            Vector3 moveTo = new Vector3(curPos.x, curPos.y, 0) * 5f * Time.deltaTime;
-            cursor.transform.position += moveTo;
-        }
-        else
-        {
-            cursor.transform.position = curPos;
-        }
-
-        if (Input.GetMouseButtonDown(0) || controls.Player.rightTrigger.triggered)
-        {
-            cursor.GetComponent<SpriteRenderer>().sprite = cursorSpriteClicked;
-        }
-        if (Input.GetMouseButtonUp(0) || controls.Player.rightTrigger.WasReleasedThisFrame())
-        {
-            cursor.GetComponent<SpriteRenderer>().sprite = baseCursorSprite;
         }
     }
 
@@ -394,12 +368,23 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // Get the mouse position in world space
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        mousePosition.z = 0f; // Ensure Z position is zero for 2D
+        // If mouse was used get mouse position, otherwise get player position
+        Vector3 position;
+
+        if (!controller)
+        {
+            // Get the mouse position in world space
+            position = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            position.z = 0f; // Ensure Z position is zero for 2D
+        }
+        else
+        {
+            // Get the player's current position
+            position = transform.position;
+        }
 
         // Call the central HandleAction method in PlantingManager
-        plantingManager.HandleAction(mousePosition);
+        plantingManager.HandleAction(position);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

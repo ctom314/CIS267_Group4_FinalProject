@@ -39,6 +39,9 @@ public class BarnInteract : MonoBehaviour
         // Setup player controls
         controls = new PlayerControls();
 
+        // Open sleep menu
+        controls.Player.Interact.performed += ctx => OpenSleepMenu();
+
         // Back button to close in-game menus
         controls.Player.Back.performed += ctx => CloseSleepMenu();
     }
@@ -54,15 +57,6 @@ public class BarnInteract : MonoBehaviour
     }
 
     // ================================================================================
-
-    private void Update()
-    {
-        // Check if the player is nearby and presses the interaction key
-        if (isPlayerNearby && (Input.GetMouseButtonDown(1) || Input.GetButtonDown("Submit")) && timeManager.isDay)
-        {
-            OpenSleepMenu();
-        }
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -84,23 +78,32 @@ public class BarnInteract : MonoBehaviour
 
     public void OpenSleepMenu()
     {
-        // Activate the sleep menu UI
-        sleepMenu.SetActive(true);
-        darkBackground.SetActive(true);
+        if (isPlayerNearby && timeManager.isDay)
+        {
+            // Disable jab
+            PitchforkController.canJab = false;
 
-        // Disable player movement
-        PlayerMovement.canMove = false;
+            // Activate the sleep menu UI
+            sleepMenu.SetActive(true);
+            darkBackground.SetActive(true);
 
-        // Prevent pausing
-        PauseManager.canPause = false;
+            // Disable player movement
+            PlayerMovement.canMove = false;
 
-        // Setup first button
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(barnFirstButton);
+            // Prevent pausing
+            PauseManager.canPause = false;
+
+            // Setup first button
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(barnFirstButton);
+        }
     }
 
     public void CloseSleepMenu()
     {
+        // Enable jab
+        PitchforkController.canJab = true;
+
         // Deactivate the sleep menu UI
         sleepMenu.SetActive(false);
         darkBackground.SetActive(false);

@@ -38,12 +38,13 @@ public class PersistentData : MonoBehaviour
         playerMoney = PLAYER_STARTING_MONEY;
         isWin = false;
 
+        // Reset bought seeds
+        clearSeedInventory();
+
         // Reset Time/Season Stats
         day = 1;
         seasonId = 1;
         daysThisSeason = 1;
-
-        // Add more here when needed
     }
 
     // ====================================================================================
@@ -231,7 +232,7 @@ public class PersistentData : MonoBehaviour
     // Starting money amount
     public static readonly int PLAYER_STARTING_MONEY = 50; // Starting money amount (set default as needed)
 
-    private int playerMoney; 
+    private int playerMoney = 0;
 
     // Get the player's current money
     public int GetMoney()
@@ -321,6 +322,14 @@ public class PersistentData : MonoBehaviour
         if (!seedInventory.ContainsKey("Potato")) seedInventory["Potato"] = 0;
         if (!seedInventory.ContainsKey("Carrot")) seedInventory["Carrot"] = 0;
         if (!seedInventory.ContainsKey("Strawberry")) seedInventory["Strawberry"] = 0;
+    }
+
+    // Clear seed inventory
+    private void clearSeedInventory()
+    {
+        seedInventory["Potato"] = 0;
+        seedInventory["Carrot"] = 0;
+        seedInventory["Strawberry"] = 0;
     }
 
     // Add seeds to the player's inventory

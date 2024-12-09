@@ -30,6 +30,9 @@ public class ShopInteract : MonoBehaviour
         // Setup player controls
         controls = new PlayerControls();
 
+        // Open shop
+        controls.Player.Interact.performed += ctx => OpenShopMenu();
+
         // Back button to close in-game menus
         controls.Player.Back.performed += ctx => CloseShopMenu();
     }
@@ -45,15 +48,6 @@ public class ShopInteract : MonoBehaviour
     }
 
     // ================================================================================
-
-    private void Update()
-    {
-        // Check for interaction when the player is nearby and presses the right mouse button or the "Submit" button
-        if (isPlayerNearby && (Input.GetMouseButtonDown(1) || Input.GetButtonDown("Submit")))
-        {
-            OpenShopMenu();
-        }
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -80,27 +74,36 @@ public class ShopInteract : MonoBehaviour
 
     public void OpenShopMenu()
     {
-        // Activate the shop UI and optional dark background
-        shopMenu.SetActive(true);
-        isShopOpen = true;
+        if (isPlayerNearby)
+        {
+            // Disable jab
+            PitchforkController.canJab = false;
 
-        // Hide normal money UI
-        moneyTxt.SetActive(false);
-        moneyIcon.SetActive(false);
+            // Activate the shop UI and optional dark background
+            shopMenu.SetActive(true);
+            isShopOpen = true;
 
-        // Update shop money display
-        updateMoneyTxt(shopMoneyTxt.GetComponent<TextMeshProUGUI>());
+            // Hide normal money UI
+            moneyTxt.SetActive(false);
+            moneyIcon.SetActive(false);
 
-        // Setup first button
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(shopFirstButton);
+            // Update shop money display
+            updateMoneyTxt(shopMoneyTxt.GetComponent<TextMeshProUGUI>());
 
-        // Disable player movement
-        PlayerMovement.canMove = false;
+            // Setup first button
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(shopFirstButton);
+
+            // Disable player movement
+            PlayerMovement.canMove = false;
+        }
     }
 
     public void CloseShopMenu()
     {
+        // Enable jab
+        PitchforkController.canJab = true;
+
         // Deactivate the shop UI and optional dark background
         shopMenu.SetActive(false);
         isShopOpen = false;

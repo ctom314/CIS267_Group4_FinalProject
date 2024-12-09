@@ -8,6 +8,7 @@ public class SiloCanvas : MonoBehaviour
     // UI references
     public Button exitBtn;
     public Button sellBtn;
+    public TextMeshProUGUI moneyText;
 
     // Potato controls
     public Button potatoIncreaseBtn;
@@ -75,7 +76,10 @@ public class SiloCanvas : MonoBehaviour
 
     private void AdjustCropSellAmount(string crop, int adjustment)
     {
-        // Prevent adjusting values too fast or outside allowed range
+        int maxAmount = 0;
+        int curAmount = 0;
+
+        /*// Prevent adjusting values too fast or outside allowed range
         switch (crop)
         {
             case "Potato":
@@ -86,6 +90,53 @@ public class SiloCanvas : MonoBehaviour
                 break;
             case "Strawberry":
                 strawberrySellAmount = Mathf.Clamp(strawberrySellAmount + adjustment, 0, PersistentData.instance.GetCropCount("Strawberry"));
+                break;
+        }*/
+
+        // Get amounts
+        switch (crop)
+        {
+            case "Potato":
+                maxAmount = PersistentData.instance.GetCropCount("Potato");
+                curAmount = potatoSellAmount;
+                break;
+            case "Carrot":
+                maxAmount = PersistentData.instance.GetCropCount("Carrot");
+                curAmount = carrotSellAmount;
+                break;
+            case "Strawberry":
+                maxAmount = PersistentData.instance.GetCropCount("Strawberry");
+                curAmount = strawberrySellAmount;
+                break;
+        }
+
+        // Set sell amount to max amount if trying to decrease below 0
+        if (adjustment < 0 && curAmount == 0)
+        {
+            curAmount = maxAmount;
+        }
+
+        // Set sell amount to 0 if trying to increase above max amount
+        else if (adjustment > 0 && curAmount == maxAmount)
+        {
+            curAmount = 0;
+        }
+        else
+        {
+            curAmount = Mathf.Clamp(curAmount + adjustment, 0, maxAmount);
+        }
+
+        // Apply sell amounts
+        switch (crop)
+        {
+            case "Potato":
+                potatoSellAmount = curAmount;
+                break;
+            case "Carrot":
+                carrotSellAmount = curAmount;
+                break;
+            case "Strawberry":
+                strawberrySellAmount = curAmount;
                 break;
         }
 
@@ -123,6 +174,9 @@ public class SiloCanvas : MonoBehaviour
         strawberrySellAmount = 0;
 
         UpdateCropSellTexts();
+
+        // Update money text
+        ShopInteract.updateMoneyTxt(moneyText);
     }
 
     private void CloseCanvas()
